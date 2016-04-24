@@ -9,6 +9,5 @@ setup(
   packages         = [
   ],
   install_requires = [
-    'phe == 1.2.2'
   ]
 )
