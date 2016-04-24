@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-  name             = 'evoting',
+  name             = 'e-voting',
   version          = '0.1.0',
   description      = '',
   author           = '',
