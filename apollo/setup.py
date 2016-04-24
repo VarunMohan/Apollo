@@ -9,5 +9,6 @@ setup(
   packages         = [
   ],
   install_requires = [
+      'pycrypto == 2.6.1'
   ]
 )
