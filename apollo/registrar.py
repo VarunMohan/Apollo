@@ -1,7 +1,8 @@
 import threading
 
 class Registrar:
-    def __init__(self):
+    def __init__(self, election):
+        self.election = election
         self.table = {}
         self.lock = threading.Lock()
         self.done = False
@@ -32,7 +33,7 @@ class Registrar:
         self.lock.release()
 
 
-    
+
 class VoterRecord:
     def __init__(self, vote, has_voted):
         self.vote = vote
