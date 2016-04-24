@@ -1,5 +1,3 @@
-from registrar import Registrar
-
 class Voter:
     def __init__(self, voter_id, registrar, tallier):
         self.voter_id = voter_id
