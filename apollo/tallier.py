@@ -2,7 +2,7 @@ from registrar import Registrar
 
 class Tallier:
     def __init__(self):
-        self.registar = Registrar()
+        self.registrar = Registrar()
         self.vote_tally = 0
         self.tallied = False
     
