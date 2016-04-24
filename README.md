@@ -1,4 +1,4 @@
-# e-voting
+# Apollo 
 
 ```
 source env/bin/activate

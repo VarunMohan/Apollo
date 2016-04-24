@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-  name             = 'e-voting',
+  name             = 'apollo',
   version          = '0.1.0',
   description      = '',
   author           = '',
