@@ -5,8 +5,8 @@ from voter import Voter
 import random
 
 if __name__ == '__main__':
-    t = Tallier()
     r = Registrar()
+    t = Tallier(r)
 
     voters = [Voter(i, r, t) for i in range(100)]
     total = 0

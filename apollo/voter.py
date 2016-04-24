@@ -6,8 +6,8 @@ class Voter:
         self.registrar = registrar
         self.tallier = tallier
 
-    def vote(vote):
-        if self.registrar.add_voter(voter_id, vote):
-            if self.tallier.send_vote(voter_id, vote):
+    def vote(self, vote):
+        if self.registrar.add_voter(self.voter_id, vote):
+            if self.tallier.send_vote(self.voter_id, vote):
                 return True
         return False
