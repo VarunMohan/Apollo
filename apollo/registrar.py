@@ -1,12 +1,18 @@
+import threading
+
 class Registrar:
     def __init__(self):
         self.table = {}
+        self.lock = threading.Lock()
 
     def add_voter(self, voter_id, vote):
+        self.lock.acquire()
         if voter_id in self.table:
+            self.lock.release()
             return False
         record = VoterRecord(vote, False)
         self.table[voter_id] = record
+        self.lock.release()
         return True
 
     def confirm_vote(self, voter_id, vote):
