@@ -19,7 +19,7 @@ class Registrar:
     def confirm_vote(self, voter_id, vote):
         self.lock.acquire()
         record = self.table[voter_id]
-        if record.has_voted or record.vote == vote:
+        if record.has_voted or record.vote != vote:
             self.lock.release()
             return False
         record.has_voted = True
