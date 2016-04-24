@@ -34,10 +34,3 @@ class Election:
             i += 1
 
         return vote_totals
-
-if __name__ == '__main__':
-    pk,sk = paillier.gen_keys()
-    print(pk.n)
-    print(pk.g)
-    print(sk.l)
-    print(sk.mu)

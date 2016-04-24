@@ -4,11 +4,14 @@ from authority import Authority, Election
 from voter import Voter
 
 import random
+import xmlrpc.client
 
 if __name__ == '__main__':
-    NUM_VOTERS = 1000
+    NUM_VOTERS = 100
     NUM_CANDIDATES = 16
-
+    proxy = xmlrpc.client.ServerProxy("http://localhost:8000/")
+    print("3 is even: %s" % str(proxy.is_even(3)))
+    print("100 is even: %s" % str(proxy.is_even(100)))
 
     a = Authority()
     e = a.create_election(NUM_VOTERS, NUM_CANDIDATES)

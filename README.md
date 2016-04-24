@@ -1,4 +1,5 @@
 # Apollo 
+A secure, anonymized voting system using the Paillier cryptosystem
 
 ## How to use `virtualenv`
 
