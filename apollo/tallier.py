@@ -11,7 +11,6 @@ class Tallier:
             self.vote_tally += vote
             return True
         return False
-        
 
     def tally_votes(self):
         self.registrar.voting_complete()
