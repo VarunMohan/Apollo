@@ -42,8 +42,9 @@ class PrivateKey:
         self.l = l
         self.mu = mu
 
-pk, sk = gen_keys()
-c1 = encrypt(pk, 1)
-c2 = encrypt(pk, 2)
-c = add(pk, c1, c2)
-print(decrypt(pk, sk, c))
+if __name__ == '__main__':
+    pk, sk = gen_keys()
+    c1 = encrypt(pk, 1)
+    c2 = encrypt(pk, 2)
+    c = add(pk, c1, c2)
+    print(decrypt(pk, sk, c))

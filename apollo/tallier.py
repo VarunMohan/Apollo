@@ -1,14 +1,16 @@
 from registrar import Registrar
+from crypto import paillier
 
 class Tallier:
-    def __init__(self, registrar):
+    def __init__(self, registrar, election):
         self.registrar = registrar
-        self.vote_tally = 0
+        self.election = election
+        self.vote_tally = 1
         self.tallied = False
 
     def send_vote(self, voter_id, vote):
         if self.registrar.confirm_vote(voter_id, vote):
-            self.vote_tally += vote
+            self.vote_tally = paillier.add(self.vote_tally, vote)
             return True
         return False
 
@@ -17,4 +19,4 @@ class Tallier:
         if not self.tallied:
             return self.vote_tally
         else:
-            return 0
+            return -1
