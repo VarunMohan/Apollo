@@ -7,8 +7,11 @@ class Tallier:
         self.tallied = False
 
     def send_vote(self, voter_id, vote):
-        self.registrar.add_voter(voter_id, vote)
-        self.vote_tally += vote
+        if self.registrar.add_voter(voter_id, vote):
+            self.vote_tally += vote
+            return True
+        return False
+        
 
     def tally_votes(self):
         if not self.tallied:
