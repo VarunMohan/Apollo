@@ -1,6 +1,6 @@
 from crypto import paillier
 from election import Election
-import xmlrpc
+
 import pickle
 from xmlrpc.server import SimpleXMLRPCServer
 
@@ -46,7 +46,6 @@ class ClientAuthority:
 
 
 if __name__ == '__main__':
-    # authority = Authority()
     authority = ServerAuthority()
     server = SimpleXMLRPCServer(("localhost", 8000))
     print("Listening on port 8000...")
