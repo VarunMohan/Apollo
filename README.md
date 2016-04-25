@@ -37,3 +37,7 @@ python main.py
 * Figure out why `app.debug = True` doesn't work
 * Optimize crypto
 * Pretty website templates
+* Authenticate voters
+* Unexpose API
+* ZNP for end-to-end integrity check
+* Client-side encryption of vote
