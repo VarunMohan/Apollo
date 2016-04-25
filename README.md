@@ -14,14 +14,24 @@ source env/bin/activate
 pip install -e .
 ```
 
+If you get an error message that includes the following lines:
+```
+  Running setup.py install for Flask-XML-RPC
+    Skipping installation of /afs/athena.mit.edu/user/r/s/rsridhar/Desktop/6.857/Apollo/apollo/env/lib/python3.4/site-packages/flaskext/__init__.py (namespace package)
+      File "/afs/athena.mit.edu/user/r/s/rsridhar/Desktop/6.857/Apollo/apollo/env/lib/python3.4/site-packages/flaskext/xmlrpc.py", line 252
+        except Fault, fault:
+                    ^
+    SyntaxError: invalid syntax
+```
+
+you need to use `2to3` to fix `xmlrpc.py` to work with python3:
+```
+2to3 -w env/lib/python3.4/site-packages/flaskext/xmlrpc.py
+```
+
 To deactivate:
 ```
 deactivate
-```
-
-## Hack to make Flask-XML-RPC work with python3
-```
-2to3 -w env/lib/python3.4/site-packages/flaskext/xmlrpc.py
 ```
 
 ## Building
