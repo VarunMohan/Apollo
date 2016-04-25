@@ -9,13 +9,14 @@ from flaskext.xmlrpc import XMLRPCHandler, Fault
 from flask import render_template
 
 class Tallier:
-    def __init__(self):
+    def __init__(self, tallier_id):
         self.election = None
         # Shouldn't be done here, given during request election
         self.registrar = None
         # self.registrar = ClientRegistrar()
         self.tallied = True
         self.vote_tally = 1
+        self.tallier_id = tallier_id
 
     def request_election(self, election, r_endpoint):
         if not self.tallied:
@@ -51,7 +52,7 @@ class Tallier:
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
-t = Tallier()
+t = None
 
 @handler.register
 def request_election(req):
@@ -70,10 +71,12 @@ def tally_votes(req):
 
 @app.route('/')
 def hello_world():
-    return render_template('tallier.html', number = 0)
+    return render_template('tallier.html', tallier_id = t.tallier_id, tallied = t.tallied)
 
 if __name__ == '__main__':
-    endpoint = entity_locations.get_tallier_endpoints()[int(sys.argv[1])]
     assert(len(sys.argv) == 2)
+    tallier_id = int(sys.argv[1])
+    endpoint = entity_locations.get_tallier_endpoints()[tallier_id]
+    t = Tallier(tallier_id)
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
 
