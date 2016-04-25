@@ -26,8 +26,9 @@ If you get an error message that includes the following lines:
 
 you need to use `2to3` to fix `xmlrpc.py` to work with python3:
 ```
-2to3 -w env/lib/python3.4/site-packages/flaskext/xmlrpc.py
+2to3 -w env/lib/python3.x/site-packages/flaskext/xmlrpc.py
 ```
+Note you will need to fill x with your appropriate version number.
 
 To deactivate:
 ```
