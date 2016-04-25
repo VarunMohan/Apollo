@@ -5,7 +5,7 @@ import entitylocations
 class ClientAuthority:
     def __init__(self):
         endpoint = entitylocations.get_authority_endpoint()
-        url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/'
+        url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/api'
         print('Channel With Authority: ' + url)
         self.a = xmlrpc.client.ServerProxy(url)
 
@@ -16,5 +16,5 @@ class ClientAuthority:
 
     def compute_result(self, election_id, tallier):
         args = {'election_id': election_id}
-        resp = self.a.compute_result(pickle.dumps(args)) 
+        resp = self.a.compute_result(pickle.dumps(args))
         return pickle.loads(resp.data)

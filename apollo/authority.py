@@ -4,8 +4,8 @@ from clienttallier import ClientTallier
 import entitylocations
 
 import pickle
-import xmlrpc
-from xmlrpc.server import SimpleXMLRPCServer
+from flask import Flask
+from flaskext.xmlrpc import XMLRPCHandler, Fault
 
 class Authority:
     def __init__(self):
@@ -22,23 +22,25 @@ class Authority:
             return False
         return paillier.decrypt(self.keys[election_id][0], self.keys[election_id][1], c)
 
-class ServerAuthority:
-    def __init__(self):
-        self.a = Authority()
+app = Flask(__name__)
+handler = XMLRPCHandler('api')
+handler.connect(app, '/api')
+a = Authority()
 
-    def create_election(self, req):
-        args = pickle.loads(req.data) 
-        return pickle.dumps(self.a.create_election(args['n_voters'], args['n_candidates']))
+@handler.register
+def create_election(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(a.create_election(args['n_voters'], args['n_candidates']))
 
-    def compute_result(self, req):
-        args = pickle.loads(req.data)
-        return pickle.dumps(self.a.compute_result(args['election_id']))
+@handler.register
+def compute_result(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(a.compute_result(args['election_id']))
 
+@app.route('/')
+def hello_world():
+    return 'Hello World!\nThis is the Authority'
 
 if __name__ == '__main__':
-    authority = ServerAuthority()
     endpoint = entitylocations.get_authority_endpoint()
-    server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
-    server.register_function(authority.create_election, "create_election")
-    server.register_function(authority.compute_result, "compute_result")
-    server.serve_forever()
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)

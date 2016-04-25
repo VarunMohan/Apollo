@@ -2,9 +2,9 @@ from clientregistrar import ClientRegistrar
 from crypto import paillier, znp
 import entitylocations
 
-import xmlrpc
-from xmlrpc.server import SimpleXMLRPCServer
 import pickle
+from flask import Flask
+from flaskext.xmlrpc import XMLRPCHandler, Fault
 
 class Tallier:
     def __init__(self):
@@ -42,28 +42,31 @@ class Tallier:
         else:
             return False
 
-class ServerTallier:
-    def __init__(self):
-        self.t = Tallier()
+app = Flask(__name__)
+handler = XMLRPCHandler('api')
+handler.connect(app, '/api')
+t = Tallier()
 
-    def request_election(self, req):
-        args = pickle.loads(req.data)
-        print(args)
-        return pickle.dumps(self.t.request_election(args['election']))
+@handler.register
+def request_election(req):
+    args = pickle.loads(req.data)
+    print(args)
+    return pickle.dumps(t.request_election(args['election']))
 
-    def send_vote(self, req):
-        args = pickle.loads(req.data)
-        return pickle.dumps(self.t.send_vote(args['voter_id'], args['vote'], args['proof']))
+@handler.register
+def send_vote(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(t.send_vote(args['voter_id'], args['vote'], args['proof']))
 
-    def tally_votes(self, req):
-        args = pickle.loads(req.data)
-        return pickle.dumps(self.t.tally_votes(args['election_id']))
+@handler.register
+def tally_votes(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(t.tally_votes(args['election_id']))
+
+@app.route('/')
+def hello_world():
+    return 'Hello World!\nThis is the Tallier'
 
 if __name__ == '__main__':
-    tallier = ServerTallier()
     endpoint = entitylocations.get_tallier_endpoints()[0]
-    server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
-    server.register_function(tallier.request_election, "request_election")
-    server.register_function(tallier.send_vote, "send_vote")
-    server.register_function(tallier.tally_votes, "tally_votes")
-    server.serve_forever()
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)

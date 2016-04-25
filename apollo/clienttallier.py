@@ -5,7 +5,7 @@ import entitylocations
 class ClientTallier:
     def __init__(self):
         endpoint = entitylocations.get_tallier_endpoints()[0]
-        url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/'
+        url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/api'
         print('Channel With Tallier: ' + url)
         self.t = xmlrpc.client.ServerProxy(url)
 

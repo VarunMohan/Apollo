@@ -1,9 +1,10 @@
-import xmlrpc
-import pickle
-import entitylocations
 from clientauthority import ClientAuthority
 from clienttallier import ClientTallier
-from xmlrpc.server import SimpleXMLRPCServer
+import entitylocations
+
+import pickle
+from flask import Flask
+from flaskext.xmlrpc import XMLRPCHandler, Fault
 
 class Registrar:
     def __init__(self, n_voters, n_candidates):
@@ -11,7 +12,7 @@ class Registrar:
         self.done = False
         self.a = ClientAuthority()
         self.election = self.a.create_election(n_voters, n_candidates)
-        self.t = ClientTallier() 
+        self.t = ClientTallier()
         # for now assert
         assert(self.t.request_election(self.election))
         print('Authority Election ID: ' + str(self.election.election_id))
@@ -40,23 +41,34 @@ class Registrar:
         # dummy return
         return True
 
-class ServerRegistrar:
-    def __init__(self, n_voters, n_candidates):
-        self.r = Registrar(n_voters, n_candidates)
+app = Flask(__name__)
+handler = XMLRPCHandler('api')
+handler.connect(app, '/api')
+n_voters = 10
+n_candidates = 10
+r = Registrar(n_voters, n_candidates)
 
-    def get_election(self):
-        return pickle.dumps(self.r.get_election())
-    
-    def add_voter(self, req):
-        args = pickle.loads(req.data)
-        return pickle.dumps(self.r.add_voter(args['voter_id'], args['vote']))
-    
-    def confirm_vote(self, req):
-        args = pickle.loads(req.data)
-        return pickle.dumps(self.r.confirm_vote(args['voter_id'], args['vote']))
-    
-    def voting_complete(self):
-        return pickle.dumps(self.r.voting_complete())
+@handler.register
+def get_election():
+    return pickle.dumps(r.get_election())
+
+@handler.register
+def add_voter(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(r.add_voter(args['voter_id'], args['vote']))
+
+@handler.register
+def confirm_vote(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(r.confirm_vote(args['voter_id'], args['vote']))
+
+@handler.register
+def voting_complete():
+    return pickle.dumps(r.voting_complete())
+
+@app.route('/')
+def hello_world():
+    return 'Hello World!\nThis is the Registrar'
 
 class VoterRecord:
     def __init__(self, vote, has_voted):
@@ -64,11 +76,6 @@ class VoterRecord:
         self.has_voted = has_voted
 
 if __name__ == '__main__':
-    registrar = ServerRegistrar(10, 10)
     endpoint = entitylocations.get_registrar_endpoint()
-    server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
-    server.register_function(registrar.get_election, "get_election")
-    server.register_function(registrar.add_voter, "add_voter")
-    server.register_function(registrar.confirm_vote, "confirm_vote")
-    server.register_function(registrar.voting_complete,"voting_complete")
-    server.serve_forever()
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
+

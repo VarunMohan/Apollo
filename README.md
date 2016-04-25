@@ -1,4 +1,4 @@
-# Apollo 
+# Apollo
 A secure, anonymized voting system using the Paillier cryptosystem
 
 ## How to use `virtualenv`
@@ -19,6 +19,11 @@ To deactivate:
 deactivate
 ```
 
+## Hack to make Flask-XML-RPC work with python3
+```
+2to3 -w env/lib/python3.4/site-packages/flaskext/xmlrpc.py
+```
+
 ## Building
 ```
 python authority.py
@@ -27,4 +32,8 @@ python registrar.py
 python main.py
 ```
 
-TODO: Distribute Tallier and don't Hardcode Port Numbers
+## TODO
+* Distribute Tallier and don't hardcode port numbers
+* Figure out why `app.debug = True` doesn't work
+* Optimize crypto
+* Pretty website templates
