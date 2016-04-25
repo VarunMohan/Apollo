@@ -18,3 +18,13 @@ To deactivate:
 ```
 deactivate
 ```
+
+## Building
+```
+python authority.py
+python tallier.py
+python registrar.py
+python main.py
+```
+
+TODO: Distribute Tallier and don't Hardcode Port Numbers

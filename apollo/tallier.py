@@ -62,8 +62,8 @@ class ServerTallier:
 
 if __name__ == '__main__':
     tallier = ServerTallier()
-    server = SimpleXMLRPCServer(("localhost", 9001))
-    print("Listening on port 9001...")
+    server = SimpleXMLRPCServer(("localhost", 9002))
+    print("Listening on port 9002...")
     server.register_function(tallier.request_election, "request_election")
     server.register_function(tallier.send_vote, "send_vote")
     server.register_function(tallier.tally_votes, "tally_votes")

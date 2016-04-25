@@ -63,7 +63,7 @@ class VoterRecord:
         self.has_voted = has_voted
 
 if __name__ == '__main__':
-    registrar = ServerRegistrar(10, 5)
+    registrar = ServerRegistrar(50, 10)
     server = SimpleXMLRPCServer(("localhost", 7000))
     print("Listening on port 7000...")
     server.register_function(registrar.get_election, "get_election")

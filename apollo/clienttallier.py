@@ -3,7 +3,7 @@ import pickle
 
 class ClientTallier:
     def __init__(self):
-        self.t = xmlrpc.client.ServerProxy("http://localhost:9001/")
+        self.t = xmlrpc.client.ServerProxy("http://localhost:9002/")
 
     def request_election(self, election):
         args = {'election': election}

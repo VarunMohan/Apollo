@@ -10,8 +10,8 @@ import xmlrpc.client
 
 
 if __name__ == '__main__':
-    NUM_VOTERS = 10
-    NUM_CANDIDATES = 5
+    NUM_VOTERS = 50
+    NUM_CANDIDATES = 10
 
     # e = a.create_election(NUM_VOTERS, NUM_CANDIDATES)
     # eid = e.election_id
