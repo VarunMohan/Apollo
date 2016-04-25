@@ -22,7 +22,7 @@ def encrypt(pk, msg):
         r = pycrypto.getRandomInteger(PRIME_SIZE * 2)
         if pycrypto.GCD(r,pk.n) == 1:
             break
-    return (pow(pk.g, msg, pk.n * pk.n) * pow(r, pk.n, pk.n* pk.n)) % (pk.n * pk.n)
+    return ((pow(pk.g, msg, pk.n * pk.n) * pow(r, pk.n, pk.n * pk.n)) % (pk.n * pk.n), r)
 
 def decrypt(pk, sk, c):
     u = pow(c, sk.l, pk.n * pk.n)

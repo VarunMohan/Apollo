@@ -64,7 +64,7 @@ class VoterRecord:
         self.has_voted = has_voted
 
 if __name__ == '__main__':
-    registrar = ServerRegistrar(50, 10)
+    registrar = ServerRegistrar(10, 10)
     endpoint = entitylocations.get_registrar_endpoint()
     server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
     # server = SimpleXMLRPCServer(("localhost", 7000))
