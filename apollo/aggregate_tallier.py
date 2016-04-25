@@ -1,7 +1,7 @@
-from clienttallier import ClientTallier
-from clientregistrar import ClientRegistrar 
+from client_tallier import ClientTallier
+from client_registrar import ClientRegistrar
 from crypto import paillier
-import entitylocations
+import entity_locations
 
 import pickle
 from flask import Flask
@@ -38,7 +38,7 @@ class AggregateTallier:
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
-endpoint = entitylocations.get_authority_endpoint()
+endpoint = entity_locations.get_authority_endpoint()
 at = AggregateTallier()
 
 @handler.register
@@ -52,6 +52,6 @@ def compute_aggregate_tally(req):
     return pickle.dumps(at.compute_aggregate_tally(args['election_id']))
 
 if __name__ == '__main__':
-    endpoint = entitylocations.get_aggregate_tallier_endpoint()
+    endpoint = entity_locations.get_aggregate_tallier_endpoint()
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
 

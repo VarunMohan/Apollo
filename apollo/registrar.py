@@ -1,7 +1,7 @@
-from clientauthority import ClientAuthority
-from clientaggregatetallier import ClientAggregateTallier
-from clienttallier import ClientTallier
-import entitylocations
+from client_authority import ClientAuthority
+from client_aggregate_tallier import ClientAggregateTallier
+from client_tallier import ClientTallier
+import entity_locations
 
 import pickle
 from flask import Flask
@@ -15,7 +15,7 @@ class Registrar:
         self.election = self.a.create_election(n_voters, n_candidates)
         self.endpoint = endpoint
         self.tallier_endpoints = []
-        tallier_endpoints = entitylocations.get_tallier_endpoints()
+        tallier_endpoints = entity_locations.get_tallier_endpoints()
         for endpoint in tallier_endpoints:
             tallier = ClientTallier(endpoint)
             if (tallier.request_election(self.election, self.endpoint)):
@@ -56,7 +56,7 @@ handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
 n_voters = 5
 n_candidates = 5
-endpoint = entitylocations.get_registrar_endpoint()
+endpoint = entity_locations.get_registrar_endpoint()
 r = Registrar(n_voters, n_candidates, endpoint)
 
 

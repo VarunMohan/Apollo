@@ -1,8 +1,8 @@
 from crypto import paillier
 from election import Election
-from clienttallier import ClientTallier
-from clientaggregatetallier import ClientAggregateTallier
-import entitylocations
+from client_tallier import ClientTallier
+from client_aggregate_tallier import ClientAggregateTallier
+import entity_locations
 
 import pickle
 from flask import Flask
@@ -27,7 +27,7 @@ class Authority:
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
-endpoint = entitylocations.get_authority_endpoint()
+endpoint = entity_locations.get_authority_endpoint()
 a = Authority(endpoint)
 
 @handler.register

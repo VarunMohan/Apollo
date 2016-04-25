@@ -1,10 +1,10 @@
 import pickle
 import xmlrpc.client
-import entitylocations
+import entity_locations
 
 class ClientAuthority:
     def __init__(self):
-        endpoint = entitylocations.get_authority_endpoint()
+        endpoint = entity_locations.get_authority_endpoint()
         url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/api'
         print('Channel With Authority: ' + url)
         self.a = xmlrpc.client.ServerProxy(url)

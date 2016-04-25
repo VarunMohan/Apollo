@@ -1,9 +1,9 @@
-from clientregistrar import ClientRegistrar
-from clientauthority import ClientAuthority
-from clienttallier import ClientTallier
+from client_registrar import ClientRegistrar
+from client_authority import ClientAuthority
+from client_tallier import ClientTallier
 from election import Election
 from voter import Voter
-import entitylocations
+import entity_locations
 
 import random
 import pickle
@@ -15,11 +15,11 @@ if __name__ == '__main__':
     FREQUENCY = 1
 
     a = ClientAuthority()
-    r_endpoint = entitylocations.get_registrar_endpoint()
+    r_endpoint = entity_locations.get_registrar_endpoint()
     r = ClientRegistrar(r_endpoint)
     e, tallier_endpoints = r.get_election()
     eid = e.election_id
-    t = entitylocations.get_tallier_endpoints()
+    t = entity_locations.get_tallier_endpoints()
 
     voters = [Voter(i, r, ClientTallier(tallier_endpoints[i%len(tallier_endpoints)]), e) for i in range(NUM_VOTERS)]
     expected_vote_totals = {i:0 for i in range(NUM_CANDIDATES)}

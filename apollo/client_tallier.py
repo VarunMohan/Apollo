@@ -1,6 +1,5 @@
 import xmlrpc.client
 import pickle
-import entitylocations
 
 class ClientTallier:
     def __init__(self, endpoint):

@@ -1,6 +1,6 @@
-from clientregistrar import ClientRegistrar
+from client_registrar import ClientRegistrar
 from crypto import paillier, znp
-import entitylocations
+import entity_locations
 import sys
 
 import pickle
@@ -72,6 +72,6 @@ def hello_world():
     return 'Hello World!\nThis is the Tallier'
 
 if __name__ == '__main__':
-    endpoint = entitylocations.get_tallier_endpoints()[int(sys.argv[1])]
+    endpoint = entity_locations.get_tallier_endpoints()[int(sys.argv[1])]
     assert(len(sys.argv) == 2)
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)

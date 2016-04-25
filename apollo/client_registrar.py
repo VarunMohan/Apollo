@@ -1,6 +1,5 @@
 import pickle
 import xmlrpc.client
-# import entitylocations
 
 class ClientRegistrar:
     def __init__(self, endpoint):
