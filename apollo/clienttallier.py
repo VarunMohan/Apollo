@@ -10,8 +10,8 @@ class ClientTallier:
         resp = self.t.request_election(pickle.dumps(args))
         return pickle.loads(resp.data)
 
-    def send_vote(self, voter_id, vote):
-        args = {'voter_id': voter_id, 'vote': vote}
+    def send_vote(self, voter_id, vote, proof):
+        args = {'voter_id': voter_id, 'vote': vote, "proof": proof}
         resp = self.t.send_vote(pickle.dumps(args))
         return pickle.loads(resp.data)
 

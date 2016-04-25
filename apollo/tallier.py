@@ -1,5 +1,6 @@
 from clientregistrar import ClientRegistrar
 from crypto import paillier
+from crypto import znp
 
 import xmlrpc
 from xmlrpc.server import SimpleXMLRPCServer
@@ -26,11 +27,15 @@ class Tallier:
         self.tallied = False
         return True
 
-    def send_vote(self, voter_id, vote):
+    def send_vote(self, voter_id, vote, proof):
         if self.registrar.confirm_vote(voter_id, vote):
-            self.vote_tally = paillier.add(self.election.pk, self.vote_tally, vote)
-            # print(self.vote_tally)
-            return True
+            # zero-knowledge proof
+            (u, a, e, z, esum) = proof
+            if znp.check_proof(self.election.pk, u, a, e, z, esum):
+                self.vote_tally = paillier.add(self.election.pk, self.vote_tally, vote)
+                # print(self.vote_tally)
+                return True
+        print("vote failed")
         return False
 
     def tally_votes(self, election_id):
@@ -54,7 +59,7 @@ class ServerTallier:
 
     def send_vote(self, req):
         args = pickle.loads(req.data)
-        return pickle.dumps(self.t.send_vote(args['voter_id'], args['vote']))
+        return pickle.dumps(self.t.send_vote(args['voter_id'], args['vote'], args['proof']))
 
     def tally_votes(self, req):
         args = pickle.loads(req.data)
