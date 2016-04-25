@@ -1,5 +1,5 @@
 import pickle
-import xmlrpc
+import xmlrpc.client
 import entitylocations
 
 class ClientAuthority:

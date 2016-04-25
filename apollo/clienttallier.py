@@ -1,4 +1,4 @@
-import xmlrpc
+import xmlrpc.client
 import pickle
 import entitylocations
 
@@ -9,8 +9,8 @@ class ClientTallier:
         print('Channel With Tallier: ' + url)
         self.t = xmlrpc.client.ServerProxy(url)
 
-    def request_election(self, election):
-        args = {'election': election}
+    def request_election(self, election, r_endpoint):
+        args = {'election': election, 'r_endpoint': r_endpoint}
         resp = self.t.request_election(pickle.dumps(args))
         return pickle.loads(resp.data)
 

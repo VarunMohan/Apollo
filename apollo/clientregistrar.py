@@ -1,10 +1,9 @@
 import pickle
-import xmlrpc
-import entitylocations
+import xmlrpc.client
+# import entitylocations
 
 class ClientRegistrar:
-    def __init__(self):
-        endpoint = entitylocations.get_registrar_endpoint()
+    def __init__(self, endpoint):
         url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/api'
         print('Channel With Registrar: ' + url)
         self.r = xmlrpc.client.ServerProxy(url)

@@ -7,14 +7,16 @@ from flask import Flask
 from flaskext.xmlrpc import XMLRPCHandler, Fault
 
 class Registrar:
-    def __init__(self, n_voters, n_candidates):
+    def __init__(self, n_voters, n_candidates, endpoint):
         self.table = {}
         self.done = False
         self.a = ClientAuthority()
         self.election = self.a.create_election(n_voters, n_candidates)
         self.t = ClientTallier()
+        self.endpoint = endpoint
+
         # for now assert
-        assert(self.t.request_election(self.election))
+        assert(self.t.request_election(self.election, self.endpoint))
         print('Authority Election ID: ' + str(self.election.election_id))
 
     def get_election(self):
@@ -44,9 +46,11 @@ class Registrar:
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
-n_voters = 10
-n_candidates = 10
-r = Registrar(n_voters, n_candidates)
+n_voters = 5
+n_candidates = 5
+endpoint = entitylocations.get_registrar_endpoint()
+r = Registrar(n_voters, n_candidates, endpoint)
+
 
 @handler.register
 def get_election():
@@ -76,6 +80,5 @@ class VoterRecord:
         self.has_voted = has_voted
 
 if __name__ == '__main__':
-    endpoint = entitylocations.get_registrar_endpoint()
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
 

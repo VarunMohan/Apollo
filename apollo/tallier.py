@@ -10,15 +10,17 @@ class Tallier:
     def __init__(self):
         self.election = None
         # Shouldn't be done here, given during request election
-        self.registrar = ClientRegistrar()
+        self.registrar = None
+        # self.registrar = ClientRegistrar()
         self.vote_tally = 1
         self.tallied = True
 
-    def request_election(self, election):
+    def request_election(self, election, r_endpoint):
         if not self.tallied:
             return False
 
         self.election = election
+        self.registrar = ClientRegistrar(r_endpoint)
         self.tallied = False
         return True
 
@@ -51,7 +53,7 @@ t = Tallier()
 def request_election(req):
     args = pickle.loads(req.data)
     print(args)
-    return pickle.dumps(t.request_election(args['election']))
+    return pickle.dumps(t.request_election(args['election'], args['r_endpoint']))
 
 @handler.register
 def send_vote(req):
