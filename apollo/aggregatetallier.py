@@ -3,9 +3,9 @@ from clientregistrar import ClientRegistrar
 from crypto import paillier
 import entitylocations
 
-import xmlrpc
-from xmlrpc.server import SimpleXMLRPCServer
 import pickle
+from flask import Flask
+from flaskext.xmlrpc import XMLRPCHandler, Fault
 
 
 class AggregateTallier:
@@ -35,23 +35,23 @@ class AggregateTallier:
         # May want to delete entries from table
         return total
 
-class ServerAggregateTallier:
-    def __init__(self):
-        self.at = AggregateTallier()
+app = Flask(__name__)
+handler = XMLRPCHandler('api')
+handler.connect(app, '/api')
+endpoint = entitylocations.get_authority_endpoint()
+at = AggregateTallier()
 
-    def register_talliers(self, req):
-        args = pickle.loads(req.data)
-        return pickle.dumps(self.at.register_talliers(args['election_id'], args['tallier_endpoints'], args['registrar_endpoint'], args['pk']))
+@handler.register
+def register_talliers(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(at.register_talliers(args['election_id'], args['tallier_endpoints'], args['registrar_endpoint'], args['pk']))
 
-    def compute_aggregate_tally(self, req):
-        args = pickle.loads(req.data)
-        return pickle.dumps(self.at.compute_aggregate_tally(args['election_id']))
+@handler.register
+def compute_aggregate_tally(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(at.compute_aggregate_tally(args['election_id']))
 
 if __name__ == '__main__':
-    tallier = ServerAggregateTallier()
     endpoint = entitylocations.get_aggregate_tallier_endpoint()
-    server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
-    server.register_function(tallier.register_talliers, "register_talliers")
-    server.register_function(tallier.compute_aggregate_tally, "compute_aggregate_tally")
-    server.serve_forever()
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
 

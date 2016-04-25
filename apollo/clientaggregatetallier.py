@@ -5,7 +5,7 @@ import entitylocations
 class ClientAggregateTallier:
     def __init__(self):
         endpoint = entitylocations.get_aggregate_tallier_endpoint()
-        url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/'
+        url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/api'
         print('Channel With AggregateTallier: ' + url)
         self.t = xmlrpc.client.ServerProxy(url)
 
