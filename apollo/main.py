@@ -1,19 +1,18 @@
 from tallier import Tallier
 from registrar import Registrar
-from authority import Authority, Election
+from authority import Election, ClientAuthority
 from voter import Voter
 
 import random
+import pickle
 import xmlrpc.client
+
 
 if __name__ == '__main__':
     NUM_VOTERS = 100
     NUM_CANDIDATES = 16
-    proxy = xmlrpc.client.ServerProxy("http://localhost:8000/")
-    print("3 is even: %s" % str(proxy.is_even(3)))
-    print("100 is even: %s" % str(proxy.is_even(100)))
 
-    a = Authority()
+    a = ClientAuthority()
     e = a.create_election(NUM_VOTERS, NUM_CANDIDATES)
     eid = e.election_id
     r = Registrar(e)
@@ -41,3 +40,4 @@ if __name__ == '__main__':
         assert expected_vote_totals[i] == real_vote_totals[i]
 
     print("Everything is going swimmingly")
+

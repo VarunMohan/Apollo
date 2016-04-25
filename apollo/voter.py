@@ -9,7 +9,6 @@ class Voter:
 
     def encrypt_vote(self, candidate):
         m = self.election.n_voters
-        n = self.election.pk
         vote = pow(m, candidate)
         return paillier.encrypt(self.election.pk, vote)
 
