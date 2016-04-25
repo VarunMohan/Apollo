@@ -47,7 +47,7 @@ python main.py
 This runs two talliers.
 
 ## TODO
-* Distribute Tallier and don't hardcode port numbers
+* Don't hardcode port numbers
 * Figure out why `app.debug = True` doesn't work
 * Optimize crypto
 * Pretty website templates
