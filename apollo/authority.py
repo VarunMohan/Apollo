@@ -1,6 +1,7 @@
 from crypto import paillier
 from election import Election
 from clienttallier import ClientTallier
+from clientaggregatetallier import ClientAggregateTallier
 import entitylocations
 
 import pickle
@@ -8,16 +9,17 @@ from flask import Flask
 from flaskext.xmlrpc import XMLRPCHandler, Fault
 
 class Authority:
-    def __init__(self):
+    def __init__(self, endpoint):
         self.keys = []
+        self.endpoint = endpoint
 
     def create_election(self, n_voters, n_candidates):
         self.keys.append(paillier.gen_keys())
         return Election(n_voters, n_candidates, self.keys[-1][0], len(self.keys) - 1)
 
     def compute_result(self, election_id):
-        tallier = ClientTallier()
-        c = tallier.tally_votes(election_id)
+        tallier = ClientAggregateTallier()
+        c = tallier.compute_aggregate_tally(election_id) 
         if not c:
             return False
         return paillier.decrypt(self.keys[election_id][0], self.keys[election_id][1], c)
@@ -25,7 +27,8 @@ class Authority:
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
-a = Authority()
+endpoint = entitylocations.get_authority_endpoint()
+a = Authority(endpoint)
 
 @handler.register
 def create_election(req):
@@ -42,5 +45,4 @@ def hello_world():
     return 'Hello World!\nThis is the Authority'
 
 if __name__ == '__main__':
-    endpoint = entitylocations.get_authority_endpoint()
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)

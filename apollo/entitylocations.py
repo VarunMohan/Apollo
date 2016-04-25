@@ -17,6 +17,11 @@ def get_registrar_endpoint():
         line = f.readline()
         return Endpoint(line)
 
+def get_aggregate_tallier_endpoint():
+    with open('endpoints/aggregate_tallier', 'r') as f:
+        line = f.readline()
+        return Endpoint(line)
+
 class Endpoint:
     def __init__(self, str_endpoint):
         endpoint = str_endpoint.strip().split(' ')

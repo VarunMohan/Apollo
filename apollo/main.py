@@ -17,11 +17,11 @@ if __name__ == '__main__':
     a = ClientAuthority()
     r_endpoint = entitylocations.get_registrar_endpoint()
     r = ClientRegistrar(r_endpoint)
-    e = r.get_election()
+    e, tallier_endpoints = r.get_election()
     eid = e.election_id
-    t = ClientTallier()
+    t = entitylocations.get_tallier_endpoints()
 
-    voters = [Voter(i, r, t, e) for i in range(NUM_VOTERS)]
+    voters = [Voter(i, r, ClientTallier(tallier_endpoints[i%len(tallier_endpoints)]), e) for i in range(NUM_VOTERS)]
     expected_vote_totals = {i:0 for i in range(NUM_CANDIDATES)}
 
     current_votes = 0

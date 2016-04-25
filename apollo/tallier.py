@@ -1,6 +1,7 @@
 from clientregistrar import ClientRegistrar
 from crypto import paillier, znp
 import entitylocations
+import sys
 
 import pickle
 from flask import Flask
@@ -12,8 +13,8 @@ class Tallier:
         # Shouldn't be done here, given during request election
         self.registrar = None
         # self.registrar = ClientRegistrar()
-        self.vote_tally = 1
         self.tallied = True
+        self.vote_tally = 1
 
     def request_election(self, election, r_endpoint):
         if not self.tallied:
@@ -22,6 +23,7 @@ class Tallier:
         self.election = election
         self.registrar = ClientRegistrar(r_endpoint)
         self.tallied = False
+        self.vote_tally = 1
         return True
 
     def send_vote(self, voter_id, vote, proof):
@@ -38,8 +40,9 @@ class Tallier:
     def tally_votes(self, election_id):
         if self.election.election_id != election_id:
             return False
-        self.registrar.voting_complete()
+        # self.registrar.voting_complete()
         if not self.tallied:
+            self.tallied = True
             return self.vote_tally
         else:
             return False
@@ -52,7 +55,6 @@ t = Tallier()
 @handler.register
 def request_election(req):
     args = pickle.loads(req.data)
-    print(args)
     return pickle.dumps(t.request_election(args['election'], args['r_endpoint']))
 
 @handler.register
@@ -70,5 +72,6 @@ def hello_world():
     return 'Hello World!\nThis is the Tallier'
 
 if __name__ == '__main__':
-    endpoint = entitylocations.get_tallier_endpoints()[0]
+    endpoint = entitylocations.get_tallier_endpoints()[int(sys.argv[1])]
+    assert(len(sys.argv) == 2)
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
