@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
         voter.vote(candidate)
         if current_votes % FREQUENCY == 0:
-            print(current_votes)
+            print("Completed Processing Vote:", current_votes)
         current_votes += 1
 
     result = a.compute_result(eid, t)

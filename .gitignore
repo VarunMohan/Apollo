@@ -89,3 +89,4 @@ ENV/
 
 # Output Files
 out_*
+*.log
