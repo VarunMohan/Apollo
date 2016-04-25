@@ -1,5 +1,5 @@
 from tallier import Tallier
-from registrar import Registrar
+from registrar import ClientRegistrar, Registrar
 from authority import ClientAuthority
 from election import Election
 from voter import Voter
@@ -10,13 +10,16 @@ import xmlrpc.client
 
 
 if __name__ == '__main__':
-    NUM_VOTERS = 100
-    NUM_CANDIDATES = 16
+    NUM_VOTERS = 10
+    NUM_CANDIDATES = 5
 
+    # e = a.create_election(NUM_VOTERS, NUM_CANDIDATES)
+    # eid = e.election_id
     a = ClientAuthority()
-    e = a.create_election(NUM_VOTERS, NUM_CANDIDATES)
+    # r = Registrar(NUM_VOTERS, NUM_CANDIDATES)
+    r = ClientRegistrar(NUM_VOTERS, NUM_CANDIDATES)
+    e = r.get_election()
     eid = e.election_id
-    r = Registrar(e)
     t = Tallier(r, e)
 
     voters = [Voter(i, r, t, e) for i in range(NUM_VOTERS)]

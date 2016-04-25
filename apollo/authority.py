@@ -10,6 +10,7 @@ class Authority:
         self.keys = []
 
     def create_election(self, n_voters, n_candidates):
+        print("HI")
         self.keys.append(paillier.gen_keys())
         return Election(n_voters, n_candidates, self.keys[-1][0], len(self.keys) - 1)
 
@@ -42,6 +43,7 @@ class ClientAuthority:
 
     def compute_result(self, election_id, tallier):
         args = {'election_id': election_id, 'tallier': tallier}
+        print(args)
         resp = self.a.compute_result(pickle.dumps(args)) 
         return pickle.loads(resp.data)
 
