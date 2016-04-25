@@ -1,5 +1,6 @@
 import xmlrpc
 import pickle
+import entitylocations
 from clientauthority import ClientAuthority
 from clienttallier import ClientTallier
 from xmlrpc.server import SimpleXMLRPCServer
@@ -13,7 +14,7 @@ class Registrar:
         self.t = ClientTallier() 
         # for now assert
         assert(self.t.request_election(self.election))
-        print(self.election.election_id)
+        print('Authority Election ID: ' + str(self.election.election_id))
 
     def get_election(self):
         return self.election
@@ -64,8 +65,10 @@ class VoterRecord:
 
 if __name__ == '__main__':
     registrar = ServerRegistrar(50, 10)
-    server = SimpleXMLRPCServer(("localhost", 7000))
-    print("Listening on port 7000...")
+    endpoint = entitylocations.get_registrar_endpoint()
+    server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
+    # server = SimpleXMLRPCServer(("localhost", 7000))
+    # print("Listening on port 7000...")
     server.register_function(registrar.get_election, "get_election")
     server.register_function(registrar.add_voter, "add_voter")
     server.register_function(registrar.confirm_vote, "confirm_vote")

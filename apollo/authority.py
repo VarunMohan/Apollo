@@ -1,6 +1,7 @@
 from crypto import paillier
 from election import Election
 from clienttallier import ClientTallier
+import entitylocations
 
 import pickle
 import xmlrpc
@@ -36,8 +37,10 @@ class ServerAuthority:
 
 if __name__ == '__main__':
     authority = ServerAuthority()
-    server = SimpleXMLRPCServer(("localhost", 8000))
-    print("Listening on port 8000...")
+    endpoint = entitylocations.get_authority_endpoint()
+    server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
+    # server = SimpleXMLRPCServer(("localhost", 8000))
+    # print("Listening on port 8000...")
     server.register_function(authority.create_election, "create_election")
     server.register_function(authority.compute_result, "compute_result")
     server.serve_forever()

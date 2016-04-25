@@ -1,9 +1,14 @@
 import pickle
 import xmlrpc
+import entitylocations
 
 class ClientRegistrar:
     def __init__(self):
-        self.r = xmlrpc.client.ServerProxy("http://localhost:7000/")
+        endpoint = entitylocations.get_registrar_endpoint()
+        url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/'
+        print('Channel With Registrar: ' + url)
+        self.r = xmlrpc.client.ServerProxy(url)
+        # self.r = xmlrpc.client.ServerProxy("http://localhost:7000/")
 
     def get_election(self):
         resp = self.r.get_election()

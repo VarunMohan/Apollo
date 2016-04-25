@@ -1,5 +1,6 @@
 from clientregistrar import ClientRegistrar
 from crypto import paillier
+import entitylocations
 
 import xmlrpc
 from xmlrpc.server import SimpleXMLRPCServer
@@ -62,8 +63,10 @@ class ServerTallier:
 
 if __name__ == '__main__':
     tallier = ServerTallier()
-    server = SimpleXMLRPCServer(("localhost", 9002))
-    print("Listening on port 9002...")
+    endpoint = entitylocations.get_tallier_endpoints()[0]
+    server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
+    # server = SimpleXMLRPCServer(("localhost", 9002))
+    # print("Listening on port 9002...")
     server.register_function(tallier.request_election, "request_election")
     server.register_function(tallier.send_vote, "send_vote")
     server.register_function(tallier.tally_votes, "tally_votes")
