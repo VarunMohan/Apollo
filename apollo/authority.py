@@ -2,6 +2,7 @@ from crypto import paillier
 from election import Election
 
 import pickle
+import xmlrpc
 from xmlrpc.server import SimpleXMLRPCServer
 
 class Authority:
