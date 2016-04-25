@@ -67,8 +67,6 @@ if __name__ == '__main__':
     registrar = ServerRegistrar(10, 10)
     endpoint = entitylocations.get_registrar_endpoint()
     server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
-    # server = SimpleXMLRPCServer(("localhost", 7000))
-    # print("Listening on port 7000...")
     server.register_function(registrar.get_election, "get_election")
     server.register_function(registrar.add_voter, "add_voter")
     server.register_function(registrar.confirm_vote, "confirm_vote")

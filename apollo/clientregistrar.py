@@ -8,7 +8,6 @@ class ClientRegistrar:
         url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/'
         print('Channel With Registrar: ' + url)
         self.r = xmlrpc.client.ServerProxy(url)
-        # self.r = xmlrpc.client.ServerProxy("http://localhost:7000/")
 
     def get_election(self):
         resp = self.r.get_election()

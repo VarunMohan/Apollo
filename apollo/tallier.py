@@ -9,15 +9,10 @@ import pickle
 class Tallier:
     def __init__(self):
         self.election = None
+        # Shouldn't be done here, given during request election
         self.registrar = ClientRegistrar()
         self.vote_tally = 1
         self.tallied = True
-
-    # def __init__(self, registrar, election):
-        # # self.registrar = registrar
-        # self.election = election
-        # self.vote_tally = 1
-        # self.tallied = False
 
     def request_election(self, election):
         if not self.tallied:
@@ -41,7 +36,6 @@ class Tallier:
     def tally_votes(self, election_id):
         if self.election.election_id != election_id:
             return False
-        # dumb fix
         self.registrar.voting_complete()
         if not self.tallied:
             return self.vote_tally
@@ -69,8 +63,6 @@ if __name__ == '__main__':
     tallier = ServerTallier()
     endpoint = entitylocations.get_tallier_endpoints()[0]
     server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
-    # server = SimpleXMLRPCServer(("localhost", 9002))
-    # print("Listening on port 9002...")
     server.register_function(tallier.request_election, "request_election")
     server.register_function(tallier.send_vote, "send_vote")
     server.register_function(tallier.tally_votes, "tally_votes")
