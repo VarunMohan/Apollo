@@ -1,4 +1,5 @@
 from crypto import paillier
+from election import Election
 import xmlrpc
 import pickle
 from xmlrpc.server import SimpleXMLRPCServer
@@ -29,15 +30,6 @@ class ServerAuthority:
         args = pickle.loads(req.data)
         return pickle.dumps(self.a.compute_result(args['election_id'], args['tallier']))
 
-    # def create_election(self, n_voters, n_candidates):
-        # print("HI1")
-        # e = self.a.create_election(n_voters, n_candidates)
-        # s = pickle.dumps(e)
-        # return s
-
-    # def compute_result(self, election_id, tallier):
-        # return pickle.dumps(self.a.compute_result(election_id, tallier))
-
 class ClientAuthority:
     def __init__(self):
         self.a = xmlrpc.client.ServerProxy("http://localhost:8000/")
@@ -52,29 +44,6 @@ class ClientAuthority:
         resp = self.a.compute_result(pickle.dumps(args)) 
         return pickle.loads(resp.data)
 
-    # def compute_result(self, election_id, tallier):
-        # return pickle.loads(self.a.compute_result(election_id, tallier).data)
-
-class Election:
-    def __init__(self, n_voters, n_candidates, pk, election_id):
-        self.n_voters = n_voters
-        self.n_candidates = n_candidates
-        self.pk = pk
-        self.election_id = election_id
-
-        assert pow(n_voters, n_candidates) < self.pk.n
-
-    def decode_result(self, result):
-        m = self.n_voters
-        vote_totals = {i:0 for i in range(self.n_candidates)}
-
-        i = 0
-        while result != 0:
-            vote_totals[i] = (result % m)
-            result = result // m
-            i += 1
-
-        return vote_totals
 
 if __name__ == '__main__':
     # authority = Authority()

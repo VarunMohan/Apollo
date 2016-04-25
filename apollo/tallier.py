@@ -12,7 +12,6 @@ class Tallier:
         if self.registrar.confirm_vote(voter_id, vote):
             self.vote_tally = paillier.add(self.election.pk, self.vote_tally, vote)
             return True
-        print("sexy")
         return False
 
     def tally_votes(self, election_id):

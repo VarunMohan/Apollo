@@ -1,6 +1,7 @@
 from tallier import Tallier
 from registrar import Registrar
-from authority import Election, ClientAuthority
+from authority import ClientAuthority
+from election import Election
 from voter import Voter
 
 import random
