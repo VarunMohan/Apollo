@@ -6,6 +6,7 @@ import entity_locations
 import pickle
 from flask import Flask
 from flaskext.xmlrpc import XMLRPCHandler, Fault
+from flask import render_template
 
 
 class AggregateTallier:
@@ -50,6 +51,10 @@ def register_talliers(req):
 def compute_aggregate_tally(req):
     args = pickle.loads(req.data)
     return pickle.dumps(at.compute_aggregate_tally(args['election_id']))
+
+@app.route('/')
+def hello_world():
+    return render_template('aggregate_tallier.html')
 
 if __name__ == '__main__':
     endpoint = entity_locations.get_aggregate_tallier_endpoint()

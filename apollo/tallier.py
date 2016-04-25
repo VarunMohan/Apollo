@@ -6,6 +6,7 @@ import sys
 import pickle
 from flask import Flask
 from flaskext.xmlrpc import XMLRPCHandler, Fault
+from flask import render_template
 
 class Tallier:
     def __init__(self):
@@ -69,9 +70,10 @@ def tally_votes(req):
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!\nThis is the Tallier'
+    return render_template('tallier.html', number = 0)
 
 if __name__ == '__main__':
     endpoint = entity_locations.get_tallier_endpoints()[int(sys.argv[1])]
     assert(len(sys.argv) == 2)
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
+

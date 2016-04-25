@@ -6,6 +6,7 @@ import entity_locations
 import pickle
 from flask import Flask
 from flaskext.xmlrpc import XMLRPCHandler, Fault
+from flask import render_template
 
 class Registrar:
     def __init__(self, n_voters, n_candidates, endpoint):
@@ -80,7 +81,7 @@ def voting_complete():
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!\nThis is the Registrar'
+    return render_template('registrar.html')
 
 class VoterRecord:
     def __init__(self, vote, has_voted):

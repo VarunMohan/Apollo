@@ -7,6 +7,7 @@ import entity_locations
 import pickle
 from flask import Flask
 from flaskext.xmlrpc import XMLRPCHandler, Fault
+from flask import render_template
 
 class Authority:
     def __init__(self, endpoint):
@@ -19,7 +20,7 @@ class Authority:
 
     def compute_result(self, election_id):
         tallier = ClientAggregateTallier()
-        c = tallier.compute_aggregate_tally(election_id) 
+        c = tallier.compute_aggregate_tally(election_id)
         if not c:
             return False
         return paillier.decrypt(self.keys[election_id][0], self.keys[election_id][1], c)
@@ -42,7 +43,7 @@ def compute_result(req):
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!\nThis is the Authority'
+    return render_template('authority.html')
 
 if __name__ == '__main__':
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
