@@ -6,14 +6,15 @@ from clienttallier import ClientTallier
 from xmlrpc.server import SimpleXMLRPCServer
 
 class Registrar:
-    def __init__(self, n_voters, n_candidates):
+    def __init__(self, n_voters, n_candidates, endpoint):
         self.table = {}
         self.done = False
         self.a = ClientAuthority()
         self.election = self.a.create_election(n_voters, n_candidates)
         self.t = ClientTallier() 
+        self.endpoint = endpoint
         # for now assert
-        assert(self.t.request_election(self.election))
+        assert(self.t.request_election(self.election, self.endpoint))
         print('Authority Election ID: ' + str(self.election.election_id))
 
     def get_election(self):
@@ -41,8 +42,8 @@ class Registrar:
         return True
 
 class ServerRegistrar:
-    def __init__(self, n_voters, n_candidates):
-        self.r = Registrar(n_voters, n_candidates)
+    def __init__(self, n_voters, n_candidates, endpoint):
+        self.r = Registrar(n_voters, n_candidates, endpoint)
 
     def get_election(self):
         return pickle.dumps(self.r.get_election())
@@ -64,8 +65,8 @@ class VoterRecord:
         self.has_voted = has_voted
 
 if __name__ == '__main__':
-    registrar = ServerRegistrar(10, 10)
     endpoint = entitylocations.get_registrar_endpoint()
+    registrar = ServerRegistrar(5, 5, endpoint)
     server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
     server.register_function(registrar.get_election, "get_election")
     server.register_function(registrar.add_voter, "add_voter")

@@ -3,6 +3,7 @@ from clientauthority import ClientAuthority
 from clienttallier import ClientTallier 
 from election import Election
 from voter import Voter
+import entitylocations
 
 import random
 import pickle
@@ -10,18 +11,15 @@ import xmlrpc.client
 
 
 if __name__ == '__main__':
-    NUM_VOTERS = 10
-    NUM_CANDIDATES = 10
+    NUM_VOTERS = 5
+    NUM_CANDIDATES = 5
 
-    # e = a.create_election(NUM_VOTERS, NUM_CANDIDATES)
-    # eid = e.election_id
     a = ClientAuthority()
-    # r = Registrar(NUM_VOTERS, NUM_CANDIDATES)
-    r = ClientRegistrar()
+    r_endpoint = entitylocations.get_registrar_endpoint()
+    r = ClientRegistrar(r_endpoint)
     e = r.get_election()
     eid = e.election_id
     t = ClientTallier()
-    # t = Tallier(r, e)
 
     voters = [Voter(i, r, t, e) for i in range(NUM_VOTERS)]
     expected_vote_totals = {i:0 for i in range(NUM_CANDIDATES)}
