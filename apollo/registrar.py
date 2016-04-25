@@ -2,6 +2,7 @@ import xmlrpc
 import pickle
 import entitylocations
 from clientauthority import ClientAuthority
+from clientaggregatetallier import ClientAggregateTallier
 from clienttallier import ClientTallier
 from xmlrpc.server import SimpleXMLRPCServer
 
@@ -11,14 +12,20 @@ class Registrar:
         self.done = False
         self.a = ClientAuthority()
         self.election = self.a.create_election(n_voters, n_candidates)
-        self.t = ClientTallier() 
         self.endpoint = endpoint
-        # for now assert
-        assert(self.t.request_election(self.election, self.endpoint))
+        self.tallier_endpoints = []
+        tallier_endpoints = entitylocations.get_tallier_endpoints()
+        for endpoint in tallier_endpoints:
+            tallier = ClientTallier(endpoint) 
+            if (tallier.request_election(self.election, self.endpoint)):
+                self.tallier_endpoints.append(endpoint)
+        aggregate_tallier = ClientAggregateTallier()
+        aggregate_tallier.register_talliers(self.election.election_id, self.tallier_endpoints, self.endpoint, self.election.pk)
+
         print('Authority Election ID: ' + str(self.election.election_id))
 
     def get_election(self):
-        return self.election
+        return self.election, self.tallier_endpoints
 
     def add_voter(self, voter_id, vote):
         if voter_id in self.table or self.done:
@@ -35,6 +42,8 @@ class Registrar:
         return True
 
     def voting_complete(self):
+        print("Voting is Complete")
+        # will add a publish feature after this
         self.done = True
         self.table = {}
         self.election = None

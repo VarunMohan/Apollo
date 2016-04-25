@@ -1,6 +1,7 @@
 from clientregistrar import ClientRegistrar
 from crypto import paillier, znp
 import entitylocations
+import sys
 
 import xmlrpc
 from xmlrpc.server import SimpleXMLRPCServer
@@ -12,8 +13,8 @@ class Tallier:
         # Shouldn't be done here, given during request election
         self.registrar = None
         # self.registrar = ClientRegistrar()
-        self.vote_tally = 1
         self.tallied = True
+        self.vote_tally = 1
 
     def request_election(self, election, r_endpoint):
         if not self.tallied:
@@ -22,6 +23,7 @@ class Tallier:
         self.election = election
         self.registrar = ClientRegistrar(r_endpoint)
         self.tallied = False
+        self.vote_tally = 1
         return True
 
     def send_vote(self, voter_id, vote, proof):
@@ -38,8 +40,9 @@ class Tallier:
     def tally_votes(self, election_id):
         if self.election.election_id != election_id:
             return False
-        self.registrar.voting_complete()
+        # self.registrar.voting_complete()
         if not self.tallied:
+            self.tallied = True
             return self.vote_tally
         else:
             return False
@@ -50,7 +53,6 @@ class ServerTallier:
 
     def request_election(self, req):
         args = pickle.loads(req.data)
-        print(args)
         return pickle.dumps(self.t.request_election(args['election'], args['r_endpoint']))
 
     def send_vote(self, req):
@@ -63,7 +65,8 @@ class ServerTallier:
 
 if __name__ == '__main__':
     tallier = ServerTallier()
-    endpoint = entitylocations.get_tallier_endpoints()[0]
+    assert(len(sys.argv) == 2)
+    endpoint = entitylocations.get_tallier_endpoints()[int(sys.argv[1])]
     server = SimpleXMLRPCServer((endpoint.hostname, endpoint.port))
     server.register_function(tallier.request_election, "request_election")
     server.register_function(tallier.send_vote, "send_vote")

@@ -21,10 +21,13 @@ deactivate
 
 ## Building
 ```
+python aggregatetallier.py
 python authority.py
-python tallier.py
+python tallier.py 0
+python tallier.py 1
 python registrar.py
 python main.py
 ```
 
-TODO: Distribute Tallier and don't Hardcode Port Numbers
+This runs two talliers
+
