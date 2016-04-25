@@ -15,7 +15,7 @@ class Voter:
     def vote(self, candidate):
         encrypted_vote = self.encrypt_vote(candidate)
         if self.registrar.add_voter(self.voter_id, encrypted_vote):
-            if self.tallier.send_vote(self.voter_id, encrypted_vote, self.registrar):
+            if self.tallier.send_vote(self.voter_id, encrypted_vote):
             # if self.tallier.send_vote(self.voter_id, encrypted_vote):
                 return True
         return False

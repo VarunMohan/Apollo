@@ -1,5 +1,6 @@
 from crypto import paillier
 from election import Election
+from clienttallier import ClientTallier
 
 import pickle
 import xmlrpc
@@ -10,11 +11,11 @@ class Authority:
         self.keys = []
 
     def create_election(self, n_voters, n_candidates):
-        print("HI")
         self.keys.append(paillier.gen_keys())
         return Election(n_voters, n_candidates, self.keys[-1][0], len(self.keys) - 1)
 
-    def compute_result(self, election_id, tallier):
+    def compute_result(self, election_id):
+        tallier = ClientTallier()
         c = tallier.tally_votes(election_id)
         if not c:
             return False
@@ -30,22 +31,7 @@ class ServerAuthority:
 
     def compute_result(self, req):
         args = pickle.loads(req.data)
-        return pickle.dumps(self.a.compute_result(args['election_id'], args['tallier']))
-
-class ClientAuthority:
-    def __init__(self):
-        self.a = xmlrpc.client.ServerProxy("http://localhost:8000/")
-
-    def create_election(self, n_voters, n_candidates):
-        args = {'n_voters': n_voters, 'n_candidates': n_candidates}
-        resp = self.a.create_election(pickle.dumps(args))
-        return pickle.loads(resp.data)
-
-    def compute_result(self, election_id, tallier):
-        args = {'election_id': election_id, 'tallier': tallier}
-        print(args)
-        resp = self.a.compute_result(pickle.dumps(args)) 
-        return pickle.loads(resp.data)
+        return pickle.dumps(self.a.compute_result(args['election_id']))
 
 
 if __name__ == '__main__':

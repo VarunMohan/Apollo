@@ -1,6 +1,6 @@
-from tallier import Tallier
-from registrar import ClientRegistrar, Registrar
-from authority import ClientAuthority
+from clientregistrar import ClientRegistrar
+from clientauthority import ClientAuthority
+from clienttallier import ClientTallier 
 from election import Election
 from voter import Voter
 
@@ -17,10 +17,11 @@ if __name__ == '__main__':
     # eid = e.election_id
     a = ClientAuthority()
     # r = Registrar(NUM_VOTERS, NUM_CANDIDATES)
-    r = ClientRegistrar(NUM_VOTERS, NUM_CANDIDATES)
+    r = ClientRegistrar()
     e = r.get_election()
     eid = e.election_id
-    t = Tallier(r, e)
+    t = ClientTallier()
+    # t = Tallier(r, e)
 
     voters = [Voter(i, r, t, e) for i in range(NUM_VOTERS)]
     expected_vote_totals = {i:0 for i in range(NUM_CANDIDATES)}
