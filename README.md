@@ -58,7 +58,6 @@ NOTE: Add `sys.stdout.flush()` to see the output of stdout in logs
 
 ## TODO
 * Voters from multiple processes (rsridhar)
-* List of Candidates/Voters (rsridhar)
 * Optimize crypto (sunl)
 * Error Handling (sunl)
 * Malicious tests (sunl)
