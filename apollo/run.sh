@@ -24,7 +24,7 @@ done
 sleep 1
 
 #sleep 1
-#echo "Running Main"
-#python main.py
+echo "Running Main"
+python main.py
 
 # Note sleep is selected to make sure all servers are ready to listen on their ports (May need to increase/decrease duration)

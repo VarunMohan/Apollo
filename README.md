@@ -36,7 +36,7 @@ deactivate
 ```
 
 ## Building
-Execupt the following script to run the system with n talliers.
+Execute the following script to run the system with n talliers.
 
 ```
 ./run.sh n
