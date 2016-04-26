@@ -80,5 +80,5 @@ if __name__ == '__main__':
     registrar_endpoint = entity_locations.get_registrar_endpoint()
     # why do we pass tallier_id?
     t = Tallier(tallier_id, endpoint, registrar_endpoint)
-    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=True)
 

@@ -8,7 +8,6 @@ import entity_locations
 import random
 import pickle
 import sys
-import time
 
 
 if __name__ == '__main__':
@@ -18,6 +17,7 @@ if __name__ == '__main__':
     NUM_VOTERS = len(voter_ids)
     NUM_CANDIDATES = len(candidates)
     FREQUENCY = 1
+
 
     r_endpoint = entity_locations.get_registrar_endpoint()
     r = ClientRegistrar(r_endpoint)
@@ -47,10 +47,7 @@ if __name__ == '__main__':
         current_votes += 1
 
     a = ClientAuthority()
-    while a.is_election_running(eid):
-        time.sleep(1)
-
-    result = a.get_result(eid)
+    result = a.compute_result(eid)
     real_vote_totals = e.decode_result(result)
 
     print('Expected: {}'.format(expected_vote_totals))

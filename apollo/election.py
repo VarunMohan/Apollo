@@ -1,20 +1,22 @@
 
 class Election:
-    def __init__(self, n_voters, n_candidates, pk, election_id):
-        self.n_voters = n_voters
-        self.n_candidates = n_candidates
+    def __init__(self, voter_ids, candidates, pk, election_id):
+        self.voter_ids = voter_ids
+        self.candidates = candidates
+        self.n_voters = len(voter_ids)
+        self.n_candidates = len(candidates)
         self.pk = pk
         self.election_id = election_id
 
-        assert pow(n_voters, n_candidates) < self.pk.n
+        assert pow(self.n_voters, self.n_candidates) < self.pk.n
 
     def decode_result(self, result):
         m = self.n_voters + 1
-        vote_totals = {i:0 for i in range(self.n_candidates)}
+        vote_totals = {self.candidates[i]:0 for i in range(self.n_candidates)}
 
         i = 0
         while result != 0:
-            vote_totals[i] = (result % m)
+            vote_totals[self.candidates[i]] = (result % m)
             result = result // m
             i += 1
 

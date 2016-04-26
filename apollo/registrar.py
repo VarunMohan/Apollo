@@ -15,9 +15,11 @@ class Registrar:
         self.endpoint = endpoint
         self.tallier_endpoints = []
 
-    def register_election(self, n_voters, n_candidates):
+    def register_election(self, voter_ids, candidates):
+        n_voters = len(voter_ids)
+        n_candidates = len(candidates)
         a = ClientAuthority()
-        election = a.create_election(n_voters, n_candidates)
+        election = a.create_election(voter_ids, candidates)
         election_talliers = []
         for endpoint in self.tallier_endpoints:
             tallier = ClientTallier(endpoint)
@@ -29,7 +31,7 @@ class Registrar:
         if len(election_talliers) == 0:
             print('Failed to Register Election ID: ' + str(election.election_id))
             return False
-        aggregate_tallier = ClientAggregateTallier() 
+        aggregate_tallier = ClientAggregateTallier()
         aggregate_tallier.register_talliers(election.election_id, election_talliers, self.endpoint, election.pk)
         self.table[election.election_id] = TableEntry(election, election_talliers, False)
         print('Registered Election ID: ' + str(election.election_id))
@@ -81,7 +83,7 @@ r = Registrar(endpoint)
 @handler.register
 def register_election(req):
     args = pickle.loads(req.data)
-    return pickle.dumps(r.register_election(args['n_voters'], args['n_candidates']))
+    return pickle.dumps(r.register_election(args['voter_ids'], args['candidates']))
 
 @handler.register
 def register_tallier(req):
@@ -127,5 +129,5 @@ class TableEntry:
         self.done = False
 
 if __name__ == '__main__':
-    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=True)
 

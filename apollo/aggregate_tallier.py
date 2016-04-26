@@ -57,5 +57,5 @@ def hello_world():
 
 if __name__ == '__main__':
     endpoint = entity_locations.get_aggregate_tallier_endpoint()
-    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=True)
 

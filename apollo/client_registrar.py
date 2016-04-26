@@ -7,8 +7,8 @@ class ClientRegistrar:
         print('Channel With Registrar: ' + url)
         self.r = xmlrpc.client.ServerProxy(url)
 
-    def register_election(self, n_voters, n_candidates):
-        args = {'n_voters': n_voters, 'n_candidates': n_candidates}
+    def register_election(self, voter_ids, candidates):
+        args = {'voter_ids': voter_ids, 'candidates': candidates}
         resp = self.r.register_election(pickle.dumps(args))
         return pickle.loads(resp.data)
 
