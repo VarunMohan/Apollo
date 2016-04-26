@@ -41,7 +41,7 @@ Execupt the following script to run the system with n talliers.
 ```
 ./run.sh n
 ```
-As a test you can run concurrent ```python main.py```
+As a test you can run concurrent ```python main.py n_voters n_candidates``` where n_voters and n_candidates represent the number of voters and candidates in the election.
 
 
 You can manually run the system with two talliers by running the following commands
@@ -51,7 +51,7 @@ python authority.py
 python tallier.py 0
 python tallier.py 1
 python registrar.py
-python main.py
+python main.py n_voters n_candidates
 ```
 
 NOTE: Add `sys.stdout.flush()` to see the output of stdout in logs

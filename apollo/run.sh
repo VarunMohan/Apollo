@@ -2,7 +2,7 @@
 
 if [ -z "$1" ]; then
     #By default we have two talliers
-    TALLIER_MAX=1
+    TALLIER_MAX=4
 else
     TALLIER_MAX=$(($1-1))
 fi

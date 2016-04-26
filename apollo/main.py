@@ -15,6 +15,10 @@ if __name__ == '__main__':
     NUM_CANDIDATES = 2
     FREQUENCY = 1
 
+    if len(sys.argv) == 3:
+        NUM_VOTERS = int(sys.argv[1])
+        NUM_CANDIDATES = int(sys.argv[2])
+
     r_endpoint = entity_locations.get_registrar_endpoint()
     r = ClientRegistrar(r_endpoint)
     eid = r.register_election(NUM_VOTERS, NUM_CANDIDATES)
