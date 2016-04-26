@@ -66,6 +66,7 @@ NOTE: Add `sys.stdout.flush()` to see the output of stdout in logs
 * Authenticate voters (rsridhar)
 * ZNP for end-to-end integrity check (sunl)
 * Client-side encryption of vote (kevinzhu)
+* Multi-Election Talliers (vmohan)
 * Unexposed API (vmohan, sunl)
 * Concept of Election Owner (rsridhar)
 * Written Report (kevinzhu)
