@@ -43,6 +43,8 @@ Execute the following script to run the system with n talliers.
 ```
 As a test you can run concurrent ```python main.py n_voters n_candidates``` where n_voters and n_candidates represent the number of voters and candidates in the election.
 
+`main.py` now no longer casts votes. You must go to `localhost:7777` to cast your vote, and go to `localhost:8000` to end the election.
+The old functionality is now in `offline-runthrough.py`.
 
 You can manually run the system with two talliers by running the following commands
 ```
