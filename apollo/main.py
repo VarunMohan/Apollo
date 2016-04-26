@@ -10,16 +10,16 @@ import pickle
 
 
 if __name__ == '__main__':
-    NUM_VOTERS = 5
-    NUM_CANDIDATES = 5
-    FREQUENCY = 1
-
     a = ClientAuthority()
     r_endpoint = entity_locations.get_registrar_endpoint()
     r = ClientRegistrar(r_endpoint)
     e, tallier_endpoints = r.get_election()
     eid = e.election_id
     t = entity_locations.get_tallier_endpoints()
+
+    NUM_VOTERS = e.n_voters
+    NUM_CANDIDATES = e.n_candidates
+    FREQUENCY = 1
 
     voters = [Voter(i, r, ClientTallier(tallier_endpoints[i%len(tallier_endpoints)]), e) for i in range(NUM_VOTERS)]
     expected_vote_totals = {i:0 for i in range(NUM_CANDIDATES)}

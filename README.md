@@ -53,9 +53,8 @@ python main.py
 ```
 
 ## TODO
-* Don't hardcode port numbers
 * Figure out why `app.debug = True` doesn't work
-* Optimize crypto
+* Optimize crypto (PLS SUNL)
 * Pretty website templates
 * Authenticate voters
 * Unexpose API

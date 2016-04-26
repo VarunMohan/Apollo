@@ -59,8 +59,8 @@ class Registrar:
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
-n_voters = 5
-n_candidates = 5
+n_voters = 10
+n_candidates = 10
 assert(len(sys.argv) == 2)
 n_talliers = int(sys.argv[1])
 endpoint = entity_locations.get_registrar_endpoint()
