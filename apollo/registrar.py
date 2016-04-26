@@ -18,6 +18,7 @@ class Registrar:
         self.endpoint = endpoint
         self.tallier_endpoints = []
         tallier_endpoints = entity_locations.get_tallier_endpoints()
+        sys.stdout.flush()
         for i in range(n_talliers):
             if i > len(tallier_endpoints):
                 break
@@ -59,8 +60,8 @@ class Registrar:
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
-n_voters = 10
-n_candidates = 10
+n_voters = 5
+n_candidates = 5
 assert(len(sys.argv) == 2)
 n_talliers = int(sys.argv[1])
 endpoint = entity_locations.get_registrar_endpoint()

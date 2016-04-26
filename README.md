@@ -52,11 +52,20 @@ python registrar.py
 python main.py
 ```
 
+NOTE: Add `sys.stdout.flush()` to see the output of stdout in logs
+
 ## TODO
-* Figure out why `app.debug = True` doesn't work
-* Optimize crypto (PLS SUNL)
-* Pretty website templates
-* Authenticate voters
-* Unexpose API
-* ZNP for end-to-end integrity check
-* Client-side encryption of vote
+* Registrar supports multiple elections (vmohan)
+* Voters from multiple processes (rsridhar)
+* Talliers register with Registrar (vmohan)
+* List of Candidates/Voters (rsridhar)
+* Optimize crypto (sunl)
+* Error Handling (sunl)
+* Malicious tests (sunl)
+* Pretty website templates (kevinzhu)
+* Authenticate voters (rsridhar)
+* ZNP for end-to-end integrity check (sunl)
+* Client-side encryption of vote (kevinzhu)
+* Unexposed API (vmohan, sunl)
+* Concept of Election Owner (rsridhar)
+* Written Report (kevinzhu)
