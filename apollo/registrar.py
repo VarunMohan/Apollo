@@ -2,6 +2,7 @@ from client_authority import ClientAuthority
 from client_aggregate_tallier import ClientAggregateTallier
 from client_tallier import ClientTallier
 import entity_locations
+import sys
 
 import pickle
 from flask import Flask
@@ -9,7 +10,7 @@ from flaskext.xmlrpc import XMLRPCHandler, Fault
 from flask import render_template
 
 class Registrar:
-    def __init__(self, n_voters, n_candidates, endpoint):
+    def __init__(self, n_voters, n_candidates, endpoint, n_talliers):
         self.table = {}
         self.done = False
         self.a = ClientAuthority()
@@ -17,7 +18,10 @@ class Registrar:
         self.endpoint = endpoint
         self.tallier_endpoints = []
         tallier_endpoints = entity_locations.get_tallier_endpoints()
-        for endpoint in tallier_endpoints:
+        for i in range(n_talliers):
+            if i > len(tallier_endpoints):
+                break
+            endpoint = tallier_endpoints[i]
             tallier = ClientTallier(endpoint)
             if (tallier.request_election(self.election, self.endpoint)):
                 self.tallier_endpoints.append(endpoint)
@@ -57,8 +61,10 @@ handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
 n_voters = 5
 n_candidates = 5
+assert(len(sys.argv) == 2)
+n_talliers = int(sys.argv[1])
 endpoint = entity_locations.get_registrar_endpoint()
-r = Registrar(n_voters, n_candidates, endpoint)
+r = Registrar(n_voters, n_candidates, endpoint, n_talliers)
 
 
 @handler.register

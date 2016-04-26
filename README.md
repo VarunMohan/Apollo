@@ -36,6 +36,13 @@ deactivate
 ```
 
 ## Building
+Execupt the following script to run the system with n talliers
+
+```
+./run.sh n
+```
+
+You can manually run the system with two talliers by running the following commands
 ```
 python aggregatetallier.py
 python authority.py
@@ -44,8 +51,6 @@ python tallier.py 1
 python registrar.py
 python main.py
 ```
-
-This runs two talliers.
 
 ## TODO
 * Don't hardcode port numbers
