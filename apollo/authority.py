@@ -59,6 +59,12 @@ def get_result(req):
     return pickle.dumps(a.get_result(args['election_id']))
 
 @handler.register
+def compute_result(req):
+    #this is soley for the sake of 'offline_runthrough.py'
+    args = pickle.loads(req.data)
+    return pickle.dumps(a.compute_result(args['election_id']))
+
+@handler.register
 def is_election_running(req):
     args = pickle.loads(req.data)
     return pickle.dumps(a.is_election_running(args['election_id']))
