@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-    #By default we have two talliers
+    #By default we have four talliers
     TALLIER_MAX=4
 else
     TALLIER_MAX=$(($1-1))
@@ -21,10 +21,4 @@ for i in $(eval echo {0..$TALLIER_MAX}); do
     echo "Starting Tallier $i"
     python tallier.py $i > logs/tallier$i.log 2>&1 &
 done
-sleep 1
-
-#sleep 1
-echo "Running Main"
-python main.py
-
 # Note sleep is selected to make sure all servers are ready to listen on their ports (May need to increase/decrease duration)
