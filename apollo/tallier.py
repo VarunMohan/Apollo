@@ -7,6 +7,7 @@ import pickle
 from flask import Flask
 from flaskext.xmlrpc import XMLRPCHandler, Fault
 from flask import render_template
+import sys
 
 class Tallier:
     #Note, should handle multiple votes at the same time
@@ -38,6 +39,7 @@ class Tallier:
                 # print(self.vote_tally)
                 return True
         print("vote failed")
+        sys.stdout.flush()
         return False
 
     def tally_votes(self, election_id):

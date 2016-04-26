@@ -1,11 +1,13 @@
 <!doctype html>
-<title>Authority</title>
+<title>Registrar</title>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
 <div class=page>
-  <h1>Authority</h1>
-  <form name="compute_result" action="/api/compute_result" method="post">
+  <h1>Registrar</h1>
+  <form name="submit_vote" action="/api/submit_vote" method="post">
     Election ID: <input type="text" name="eid">
+    Voter ID: <input type="text" name="voter_id">
+    Candidate: <input type="text" name="candidate">
     <input type="submit" value="Submit">
   </form>
 </div>

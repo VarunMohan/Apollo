@@ -1,13 +1,14 @@
 from client_authority import ClientAuthority
 from client_aggregate_tallier import ClientAggregateTallier
 from client_tallier import ClientTallier
+from client_registrar import ClientRegistrar
 import entity_locations
 import sys
+from voter import Voter
 
 import pickle
-from flask import Flask
+from flask import Flask, render_template, request
 from flaskext.xmlrpc import XMLRPCHandler, Fault
-from flask import render_template
 
 class Registrar:
     def __init__(self, endpoint):

@@ -6,7 +6,6 @@ def get_tallier_endpoints():
             endpoints.append(Endpoint(line))
     return endpoints
 
-
 def get_authority_endpoint():
     with open('endpoints/authority', 'r') as f:
         line = f.readline()
@@ -19,6 +18,11 @@ def get_registrar_endpoint():
 
 def get_aggregate_tallier_endpoint():
     with open('endpoints/aggregate_tallier', 'r') as f:
+        line = f.readline()
+        return Endpoint(line)
+
+def get_voting_interface_endpoint():
+    with open('endpoints/voting_interface', 'r') as f:
         line = f.readline()
         return Endpoint(line)
 

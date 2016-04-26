@@ -1,6 +1,7 @@
 from crypto import paillier
 from crypto import znp
 import Crypto.Util.number as pycrypto
+import sys
 
 class Voter:
     def __init__(self, voter_id, registrar, tallier, election):

@@ -22,6 +22,9 @@ for i in $(eval echo {0..$TALLIER_MAX}); do
     python tallier.py $i > logs/tallier$i.log 2>&1 &
 done
 sleep 1
+echo "Starting Voting Interface"
+python voting_interface.py > logs/voting_interface.py 2>&1 &
+sleep 1
 
 #sleep 1
 echo "Running Main"
