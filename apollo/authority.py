@@ -16,14 +16,14 @@ class Authority:
 
     def create_election(self, n_voters, n_candidates):
         self.keys.append(paillier.gen_keys())
-        return Election(n_voters, n_candidates, self.keys[-1][0], len(self.keys) - 1)
+        return Election(n_voters, n_candidates, self.keys[-1][0], len(self.keys))
 
     def compute_result(self, election_id):
         tallier = ClientAggregateTallier()
         c = tallier.compute_aggregate_tally(election_id)
         if not c:
             return False
-        return paillier.decrypt(self.keys[election_id][0], self.keys[election_id][1], c)
+        return paillier.decrypt(self.keys[election_id - 1][0], self.keys[election_id - 1][1], c)
 
 app = Flask(__name__)
 handler = XMLRPCHandler('api')

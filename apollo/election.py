@@ -9,7 +9,7 @@ class Election:
         assert pow(n_voters, n_candidates) < self.pk.n
 
     def decode_result(self, result):
-        m = self.n_voters
+        m = self.n_voters + 1
         vote_totals = {i:0 for i in range(self.n_candidates)}
 
         i = 0

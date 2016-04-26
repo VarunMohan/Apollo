@@ -14,7 +14,7 @@ class ClientAuthority:
         resp = self.a.create_election(pickle.dumps(args))
         return pickle.loads(resp.data)
 
-    def compute_result(self, election_id, tallier):
+    def compute_result(self, election_id):
         args = {'election_id': election_id}
         resp = self.a.compute_result(pickle.dumps(args))
         return pickle.loads(resp.data)

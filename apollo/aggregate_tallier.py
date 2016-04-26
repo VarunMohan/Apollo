@@ -24,7 +24,6 @@ class AggregateTallier:
             return False
         total = 1
         tallier_endpoints, registrar_endpoint, pk = self.elections[election_id]
-        print(tallier_endpoints)
         for endpoint in tallier_endpoints:
             t = ClientTallier(endpoint)
             local_tally = t.tally_votes(election_id)
@@ -32,7 +31,7 @@ class AggregateTallier:
                 total = paillier.add(pk, local_tally, total)
 
         r = ClientRegistrar(registrar_endpoint)
-        r.voting_complete()
+        r.voting_complete(election_id)
         # May want to delete entries from table
         return total
 

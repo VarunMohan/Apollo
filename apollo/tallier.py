@@ -9,11 +9,12 @@ from flaskext.xmlrpc import XMLRPCHandler, Fault
 from flask import render_template
 
 class Tallier:
-    def __init__(self, tallier_id):
+    #Note, should handle multiple votes at the same time
+    def __init__(self, tallier_id, endpoint, r_endpoint):
         self.election = None
-        # Shouldn't be done here, given during request election
-        self.registrar = None
-        # self.registrar = ClientRegistrar()
+        self.registrar = ClientRegistrar(r_endpoint)
+        self.registrar.register_tallier(endpoint)
+        self.endpoint = endpoint
         self.tallied = True
         self.vote_tally = 1
         self.tallier_id = tallier_id
@@ -29,7 +30,7 @@ class Tallier:
         return True
 
     def send_vote(self, voter_id, vote, proof):
-        if self.registrar.confirm_vote(voter_id, vote):
+        if self.registrar.confirm_vote(self.election.election_id, voter_id, vote):
             # zero-knowledge proof
             (u, a, e, z, esum) = proof
             if znp.check_proof(self.election.pk, u, a, e, z, esum):
@@ -42,7 +43,6 @@ class Tallier:
     def tally_votes(self, election_id):
         if self.election.election_id != election_id:
             return False
-        # self.registrar.voting_complete()
         if not self.tallied:
             self.tallied = True
             return self.vote_tally
@@ -77,6 +77,8 @@ if __name__ == '__main__':
     assert(len(sys.argv) == 2)
     tallier_id = int(sys.argv[1])
     endpoint = entity_locations.get_tallier_endpoints()[tallier_id]
-    t = Tallier(tallier_id)
+    registrar_endpoint = entity_locations.get_registrar_endpoint()
+    # why do we pass tallier_id?
+    t = Tallier(tallier_id, endpoint, registrar_endpoint)
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
 

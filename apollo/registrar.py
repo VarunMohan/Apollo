@@ -10,81 +10,105 @@ from flaskext.xmlrpc import XMLRPCHandler, Fault
 from flask import render_template
 
 class Registrar:
-    def __init__(self, n_voters, n_candidates, endpoint, n_talliers):
+    def __init__(self, endpoint):
         self.table = {}
-        self.done = False
-        self.a = ClientAuthority()
-        self.election = self.a.create_election(n_voters, n_candidates)
         self.endpoint = endpoint
         self.tallier_endpoints = []
-        tallier_endpoints = entity_locations.get_tallier_endpoints()
-        sys.stdout.flush()
-        for i in range(n_talliers):
-            if i > len(tallier_endpoints):
-                break
-            endpoint = tallier_endpoints[i]
+
+    def register_election(self, n_voters, n_candidates):
+        a = ClientAuthority()
+        election = a.create_election(n_voters, n_candidates)
+        election_talliers = []
+        for endpoint in self.tallier_endpoints:
             tallier = ClientTallier(endpoint)
-            if (tallier.request_election(self.election, self.endpoint)):
-                self.tallier_endpoints.append(endpoint)
-        aggregate_tallier = ClientAggregateTallier()
-        aggregate_tallier.register_talliers(self.election.election_id, self.tallier_endpoints, self.endpoint, self.election.pk)
-
-        print('Authority Election ID: ' + str(self.election.election_id))
-
-    def get_election(self):
-        return self.election, self.tallier_endpoints
-
-    def add_voter(self, voter_id, vote):
-        if voter_id in self.table or self.done:
+            if (tallier.request_election(election, self.endpoint)):
+                election_talliers.append(endpoint)
+                # random threshold
+                if ((n_candidates * n_voters)/(len(election_talliers)) < 100):
+                    break
+        if len(election_talliers) == 0:
+            print('Failed to Register Election ID: ' + str(election.election_id))
             return False
-        record = VoterRecord(vote, False)
-        self.table[voter_id] = record
+        aggregate_tallier = ClientAggregateTallier() 
+        aggregate_tallier.register_talliers(election.election_id, election_talliers, self.endpoint, election.pk)
+        self.table[election.election_id] = TableEntry(election, election_talliers, False)
+        print('Registered Election ID: ' + str(election.election_id))
+        sys.stdout.flush()
+        return election.election_id
+
+    def register_tallier(self, endpoint):
+        print('Registered Tallier:', endpoint.hostname, str(endpoint.port))
+        self.tallier_endpoints.append(endpoint)
         return True
 
-    def confirm_vote(self, voter_id, vote):
-        record = self.table[voter_id]
+    def get_election(self, election_id):
+        return self.table[election_id].election, self.table[election_id].tallier_endpoints
+
+    def add_voter(self, election_id, voter_id, vote):
+        if election_id not in self.table or voter_id in self.table[election_id].registrar:
+            return False
+        if self.table[election_id].done:
+            return False
+        record = VoterRecord(vote, False)
+        self.table[election_id].registrar[voter_id] = record
+        return True
+
+    def confirm_vote(self, election_id, voter_id, vote):
+        if election_id not in self.table or voter_id not in self.table[election_id].registrar:
+            return False
+        if self.table[election_id].done:
+            return False
+        record = self.table[election_id].registrar[voter_id]
         if record.has_voted or record.vote != vote:
             return False
         record.has_voted = True
         return True
 
-    def voting_complete(self):
-        print("Voting is Complete")
+    def voting_complete(self, election_id):
+        print("Voting Complete for Election", election_id)
         # will add a publish feature after this
-        self.done = True
-        self.table = {}
-        self.election = None
-        # dummy return
+        if election_id not in self.table or self.table[election_id].done:
+            return False
+        self.table[election_id].done = True
         return True
 
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
-n_voters = 5
-n_candidates = 5
-assert(len(sys.argv) == 2)
-n_talliers = int(sys.argv[1])
 endpoint = entity_locations.get_registrar_endpoint()
-r = Registrar(n_voters, n_candidates, endpoint, n_talliers)
-
+r = Registrar(endpoint)
 
 @handler.register
-def get_election():
-    return pickle.dumps(r.get_election())
+def register_election(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(r.register_election(args['n_voters'], args['n_candidates']))
+
+@handler.register
+def register_tallier(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(r.register_tallier(args['endpoint']))
+
+# May need an unregister command
+
+@handler.register
+def get_election(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(r.get_election(args['election_id']))
 
 @handler.register
 def add_voter(req):
     args = pickle.loads(req.data)
-    return pickle.dumps(r.add_voter(args['voter_id'], args['vote']))
+    return pickle.dumps(r.add_voter(args['election_id'], args['voter_id'], args['vote']))
 
 @handler.register
 def confirm_vote(req):
     args = pickle.loads(req.data)
-    return pickle.dumps(r.confirm_vote(args['voter_id'], args['vote']))
+    return pickle.dumps(r.confirm_vote(args['election_id'], args['voter_id'], args['vote']))
 
 @handler.register
-def voting_complete():
-    return pickle.dumps(r.voting_complete())
+def voting_complete(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(r.voting_complete(args['election_id']))
 
 @app.route('/')
 def hello_world():
@@ -94,6 +118,13 @@ class VoterRecord:
     def __init__(self, vote, has_voted):
         self.vote = vote
         self.has_voted = has_voted
+
+class TableEntry:
+    def __init__(self, election, tallier_endpoints, done):
+        self.election = election
+        self.tallier_endpoints = tallier_endpoints
+        self.registrar = {}
+        self.done = False
 
 if __name__ == '__main__':
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)

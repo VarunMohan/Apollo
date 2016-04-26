@@ -7,20 +7,32 @@ class ClientRegistrar:
         print('Channel With Registrar: ' + url)
         self.r = xmlrpc.client.ServerProxy(url)
 
-    def get_election(self):
-        resp = self.r.get_election()
+    def register_election(self, n_voters, n_candidates):
+        args = {'n_voters': n_voters, 'n_candidates': n_candidates}
+        resp = self.r.register_election(pickle.dumps(args))
         return pickle.loads(resp.data)
 
-    def add_voter(self, voter_id, vote):
-        args = {'voter_id': voter_id, 'vote': vote}
+    def register_tallier(self, endpoint):
+        args = {'endpoint': endpoint}
+        resp = self.r.register_tallier(pickle.dumps(args))
+        return pickle.loads(resp.data)
+
+    def get_election(self, election_id):
+        args = {'election_id': election_id}
+        resp = self.r.get_election(pickle.dumps(args))
+        return pickle.loads(resp.data)
+
+    def add_voter(self, election_id, voter_id, vote):
+        args = {'election_id': election_id, 'voter_id': voter_id, 'vote': vote}
         resp = self.r.add_voter(pickle.dumps(args))
         return pickle.loads(resp.data)
 
-    def confirm_vote(self, voter_id, vote):
-        args = {'voter_id': voter_id, 'vote': vote}
+    def confirm_vote(self, election_id, voter_id, vote):
+        args = {'election_id': election_id, 'voter_id': voter_id, 'vote': vote}
         resp = self.r.confirm_vote(pickle.dumps(args))
         return pickle.loads(resp.data)
 
-    def voting_complete(self):
-        resp = self.r.voting_complete()
+    def voting_complete(self, election_id):
+        args = {'election_id': election_id}
+        resp = self.r.voting_complete(pickle.dumps(args))
         return pickle.loads(resp.data)

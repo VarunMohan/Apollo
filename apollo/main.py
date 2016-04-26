@@ -7,19 +7,27 @@ import entity_locations
 
 import random
 import pickle
+import sys
 
 
 if __name__ == '__main__':
-    a = ClientAuthority()
+    NUM_VOTERS = 5
+    NUM_CANDIDATES = 2
+    FREQUENCY = 1
+
     r_endpoint = entity_locations.get_registrar_endpoint()
     r = ClientRegistrar(r_endpoint)
-    e, tallier_endpoints = r.get_election()
-    eid = e.election_id
-    t = entity_locations.get_tallier_endpoints()
+    eid = r.register_election(NUM_VOTERS, NUM_CANDIDATES)
+    print("Got Election ID", eid)
+    if eid == False:
+        print("Could not get an election")
+        sys.exit(0)
 
-    NUM_VOTERS = e.n_voters
-    NUM_CANDIDATES = e.n_candidates
-    FREQUENCY = 1
+    e, tallier_endpoints = r.get_election(eid)
+
+    print("Connected to Talliers:")
+    for endpoint in tallier_endpoints:
+        print(endpoint.hostname, str(endpoint.port))
 
     voters = [Voter(i, r, ClientTallier(tallier_endpoints[i%len(tallier_endpoints)]), e) for i in range(NUM_VOTERS)]
     expected_vote_totals = {i:0 for i in range(NUM_CANDIDATES)}
@@ -34,7 +42,8 @@ if __name__ == '__main__':
             print("Completed Processing Vote:", current_votes)
         current_votes += 1
 
-    result = a.compute_result(eid, t)
+    a = ClientAuthority()
+    result = a.compute_result(eid)
     real_vote_totals = e.decode_result(result)
 
     print('Expected: {}'.format(expected_vote_totals))

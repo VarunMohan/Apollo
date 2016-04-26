@@ -13,8 +13,9 @@ class Voter:
         self.proof = None
 
     def encrypt_vote(self, candidate):
-        m = self.election.n_voters
-        vote = pow(m, candidate)
+        m = self.election.n_voters + 1
+        # add one because of overflow case
+        vote = pow((m), candidate)
         (self.evote, self.r) = paillier.encrypt(self.election.pk, vote)
 
         esum = pycrypto.getRandomInteger(1024) # in the future, the tallier sends this number
@@ -33,7 +34,7 @@ class Voter:
 
     def vote(self, candidate):
         self.encrypt_vote(candidate)
-        if self.registrar.add_voter(self.voter_id, self.evote):
+        if self.registrar.add_voter(self.election.election_id, self.voter_id, self.evote):
             if self.tallier.send_vote(self.voter_id, self.evote, self.proof):
             # if self.tallier.send_vote(self.voter_id, encrypted_vote):
                 return True
