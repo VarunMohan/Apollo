@@ -25,11 +25,14 @@ class Registrar:
         pk, eid = a.create_election()
         election = Election(voter_ids, candidates, pk, eid)
         election_talliers = []
-        # write better scheduler
-        for endpoint in self.tallier_endpoints:
+        # schedule talliers based on load
+        self.tallier_endpoints.sort(key=lambda x: x[0])
+        for i in range(len(self.tallier_endpoints)):
+            cnt, endpoint = self.tallier_endpoints[i]
             tallier = ClientTallier(endpoint)
             if (tallier.request_election(election, self.endpoint)):
                 election_talliers.append(endpoint)
+                self.tallier_endpoints[i] = (cnt + 1, endpoint)
                 # random threshold
                 if ((n_candidates * n_voters)/(len(election_talliers)) < 100):
                     break
@@ -44,8 +47,15 @@ class Registrar:
         return election.election_id
 
     def register_tallier(self, endpoint):
+        for _, t_endpoint in self.tallier_endpoints:
+            if t_endpoint.hostname == endpoint.hostname and t_endpoint.port == endpoint.port:
+                print('Already Registered Tallier:', endpoint.hostname, str(endpoint.port))
+                sys.stdout.flush()
+                return False
+
         print('Registered Tallier:', endpoint.hostname, str(endpoint.port))
-        self.tallier_endpoints.append(endpoint)
+        sys.stdout.flush()
+        self.tallier_endpoints.append((0, endpoint))
         return True
 
     def get_election(self, election_id):
@@ -65,6 +75,13 @@ class Registrar:
         # decoding should probably happen at the tallier
         self.results[election_id] = result
         self.table[election_id].done = True
+        #update for scheduling
+        for t_endpoint in self.table[election_id].tallier_endpoints:
+            for i in range(len(self.tallier_endpoints)):
+                cnt, endpoint = self.tallier_endpoints[i]
+                if t_endpoint.hostname == endpoint.hostname and t_endpoint.port == endpoint.port:
+                    self.tallier_endpoints[i] = (cnt - 1, endpoint)
+                    break
         return True
 
     def get_result(self, election_id):
