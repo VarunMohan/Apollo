@@ -1,5 +1,6 @@
 from client_tallier import ClientTallier
 from client_registrar import ClientRegistrar
+from client_authority import ClientAuthority
 import entity_locations
 import sys
 from voter import Voter
@@ -10,7 +11,10 @@ from flaskext.xmlrpc import XMLRPCHandler, Fault
 
 app = Flask(__name__)
 r_endpoint = entity_locations.get_registrar_endpoint()
+# may want to remove the endpoint location
 r = ClientRegistrar(r_endpoint)
+a_endpoint = entity_locations.get_authority_endpoint()
+a = ClientAuthority()
 
 @app.route('/api/submit_vote', methods=['POST'])
 def submit_vote():
@@ -21,6 +25,12 @@ def submit_vote():
     test = voter.vote(request.form['candidate'])
     return render_template('voting_interface.html')
 
+@app.route('/api/end_election', methods=['POST'])
+def end_election():  
+    a.compute_result(int(request.form['election_id']))
+    return render_template('voting_interface.html')
+
+    
 @app.route('/')
 def hello_world():
     return render_template('voting_interface.html')
