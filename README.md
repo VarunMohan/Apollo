@@ -41,22 +41,15 @@ Execute the following script to run the system with n talliers.
 ```
 ./run.sh n
 ```
-As a test you can run concurrent ```python main.py n_voters n_candidates``` where n_voters and n_candidates represent the number of voters and candidates in the election.
 
-`main.py` now no longer casts votes. You must go to `localhost:7777` to cast your vote, and go to `localhost:8000` to end the election.
-The old functionality is now in `offline-runthrough.py`.
+There are now 3 ways to interact with the running system. The preferred is to use `localhost:7000` to create an election, and use `localhost:7777` to cast your votes.
 
-You can manually run the system with two talliers by running the following commands
-```
-python aggregatetallier.py
-python authority.py
-python tallier.py 0
-python tallier.py 1
-python registrar.py
-python main.py n_voters n_candidates
-```
+Alternatively, `less-offline-runthrough.py` will create an election with preset candidates and voter ids. You must go to `localhost:7777` to cast your vote and end the election.
 
-NOTE: Add `sys.stdout.flush()` to see the output of stdout in logs
+Finally, `offline-runthrough.py` will create an election and execute votes, requiring no website interaction.
+
+## Debugging
+* Add `sys.stdout.flush()` to see the output of stdout in logs
 
 ## TODO
 * Optimize crypto (sunl)
