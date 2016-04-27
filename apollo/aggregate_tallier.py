@@ -47,11 +47,7 @@ def compute_aggregate_tally(req):
     args = pickle.loads(req.data)
     return pickle.dumps(at.compute_aggregate_tally(args['election_id']))
 
-@app.route('/')
-def hello_world():
-    return render_template('aggregate_tallier.html')
-
 if __name__ == '__main__':
     endpoint = entity_locations.get_aggregate_tallier_endpoint()
-    app.run(host=endpoint.hostname, port=endpoint.port, debug=True)
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
 

@@ -52,14 +52,5 @@ def compute_result(req):
     args = pickle.loads(req.data)
     return pickle.dumps(a.compute_result(args['election_id']))
 
-@app.route('/api/compute_result', methods=['POST'])
-def compute_result():
-    a.compute_result(int(request.form['eid']))
-    return render_template('authority.html')
-
-@app.route('/')
-def hello_world():
-    return render_template('authority.html')
-
 if __name__ == '__main__':
-    app.run(host=endpoint.hostname, port=endpoint.port, debug=True)
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
