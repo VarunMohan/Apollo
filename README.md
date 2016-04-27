@@ -67,7 +67,6 @@ NOTE: Add `sys.stdout.flush()` to see the output of stdout in logs
 * Authenticate voters (rsridhar)
 * ZNP for end-to-end integrity check (sunl)
 * Client-side encryption of vote (kevinzhu)
-* Fix Registrar Deadlock by using different ports (vmohan)
 * Multi-Election Talliers (vmohan)
 * Unexposed API (vmohan, sunl)
 * Concept of Election Owner (rsridhar)
