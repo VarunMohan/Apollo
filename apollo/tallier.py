@@ -73,7 +73,7 @@ def tally_votes(req):
 
 @app.route('/')
 def hello_world():
-    return render_template('tallier.html', tallier_id = t.tallier_id, tallied = t.tallied)
+    return render_template('tallier.html', tallier_id = t.tallier_id, tallied = False)
 
 if __name__ == '__main__':
     assert(len(sys.argv) == 3)
