@@ -14,6 +14,8 @@ class Tallier:
     def __init__(self, tallier_id, endpoint, r_endpoint, num_elections):
         self.registrar = ClientRegistrar(r_endpoint)
         self.registrar.register_tallier(endpoint)
+        print("Sent Registration Request")
+        sys.stdout.flush()
         self.endpoint = endpoint
         self.vote_tallies = {}
         self.tallier_id = tallier_id
@@ -79,7 +81,6 @@ if __name__ == '__main__':
     num_elections = int(sys.argv[2])
     endpoint = entity_locations.get_tallier_endpoints()[tallier_id]
     registrar_endpoint = entity_locations.get_registrar_endpoint()
-    # why do we pass tallier_id?
     t = Tallier(tallier_id, endpoint, registrar_endpoint, num_elections)
     app.run(host=endpoint.hostname, port=endpoint.port, debug=True)
 

@@ -32,3 +32,8 @@ class Endpoint:
         self.hostname = endpoint[0]
         self.port = int(endpoint[1])
 
+    def __str__(self):
+        return self.hostname + " " + str(self.port)
+
+    def __repr(self):
+        return self.__str__()
