@@ -13,18 +13,10 @@ class ClientAuthority:
         resp = self.a.create_election()
         return pickle.loads(resp.data)
 
-    def get_result(self, election_id):
-        args = {'election_id': election_id}
-        resp = self.a.get_result(pickle.dumps(args))
-        return pickle.loads(resp.data)
+    #will need prove result
 
     def compute_result(self, election_id):
         # this is soley for the sake of 'offline_runthrough.py'
         args = {'election_id': election_id}
         resp = self.a.compute_result(pickle.dumps(args))
-        return pickle.loads(resp.data)
-
-    def is_election_running(self, election_id):
-        args = {'election_id': election_id}
-        resp = self.a.is_election_running(pickle.dumps(args))
         return pickle.loads(resp.data)

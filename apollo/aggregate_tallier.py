@@ -29,10 +29,6 @@ class AggregateTallier:
             local_tally = t.tally_votes(election_id)
             if (local_tally):
                 total = paillier.add(pk, local_tally, total)
-
-        r = ClientRegistrar(registrar_endpoint)
-        r.voting_complete(election_id)
-        # May want to delete entries from table
         return total
 
 app = Flask(__name__)

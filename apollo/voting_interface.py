@@ -27,7 +27,7 @@ def submit_vote():
 
 @app.route('/api/end_election', methods=['POST'])
 def end_election():  
-    a.compute_result(int(request.form['election_id']))
+    r.end_election(int(request.form['election_id']))
     return render_template('voting_interface.html')
 
     

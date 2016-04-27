@@ -22,6 +22,21 @@ class ClientRegistrar:
         resp = self.r.get_election(pickle.dumps(args))
         return pickle.loads(resp.data)
 
+    def end_election(self, election_id):
+        args = {'election_id': election_id}
+        resp = self.r.end_election(pickle.dumps(args))
+        return pickle.loads(resp.data)
+
+    def is_election_running(self, election_id):
+        args = {'election_id': election_id}
+        resp = self.r.is_election_running(pickle.dumps(args))
+        return pickle.loads(resp.data)
+
+    def get_result(self, election_id):
+        args = {'election_id': election_id}
+        resp = self.r.get_result(pickle.dumps(args))
+        return pickle.loads(resp.data)
+
     def add_voter(self, election_id, voter_id, vote):
         args = {'election_id': election_id, 'voter_id': voter_id, 'vote': vote}
         resp = self.r.add_voter(pickle.dumps(args))
@@ -30,9 +45,4 @@ class ClientRegistrar:
     def confirm_vote(self, election_id, voter_id, vote):
         args = {'election_id': election_id, 'voter_id': voter_id, 'vote': vote}
         resp = self.r.confirm_vote(pickle.dumps(args))
-        return pickle.loads(resp.data)
-
-    def voting_complete(self, election_id):
-        args = {'election_id': election_id}
-        resp = self.r.voting_complete(pickle.dumps(args))
         return pickle.loads(resp.data)

@@ -1,5 +1,4 @@
 from client_registrar import ClientRegistrar
-from client_authority import ClientAuthority
 from client_tallier import ClientTallier
 from election import Election
 from voter import Voter
@@ -37,11 +36,10 @@ if __name__ == '__main__':
     for endpoint in tallier_endpoints:
         print(endpoint.hostname, str(endpoint.port))
 
-    a = ClientAuthority()
-    while a.is_election_running(eid):
+    while r.is_election_running(eid):
         time.sleep(1)
 
-    result = a.get_result(eid)
+    result = r.get_result(eid)
     real_vote_totals = e.decode_result(result)
     print(real_vote_totals)
 

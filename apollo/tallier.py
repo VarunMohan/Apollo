@@ -36,7 +36,6 @@ class Tallier:
             (u, a, e, z, esum) = proof
             if znp.check_proof(self.election.pk, u, a, e, z, esum):
                 self.vote_tally = paillier.add(self.election.pk, self.vote_tally, vote)
-                # print(self.vote_tally)
                 return True
         print("vote failed")
         sys.stdout.flush()

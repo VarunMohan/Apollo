@@ -1,5 +1,4 @@
 from client_registrar import ClientRegistrar
-from client_authority import ClientAuthority
 from client_tallier import ClientTallier
 from election import Election
 from voter import Voter
@@ -46,8 +45,8 @@ if __name__ == '__main__':
             print("Completed Processing Vote:", current_votes)
         current_votes += 1
 
-    a = ClientAuthority()
-    result = a.compute_result(eid)
+    r.end_election(eid)
+    result = r.get_result(eid)
     real_vote_totals = e.decode_result(result)
 
     print('Expected: {}'.format(expected_vote_totals))

@@ -32,15 +32,9 @@ class Authority:
         result = paillier.decrypt(self.keys[election_id - 1][0], self.keys[election_id - 1][1], c)
         self.election_running[election_id - 1] = False
         self.results[election_id - 1] = result
+        # print(self.vote_tally)
         return result
 
-    def get_result(self, election_id):
-        if self.election_running[election_id - 1]:
-            return False
-        return self.results[election_id - 1]
-
-    def is_election_running(self, election_id):
-        return self.election_running[election_id - 1]
 
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
@@ -53,20 +47,10 @@ def create_election():
     return pickle.dumps(a.create_election())
 
 @handler.register
-def get_result(req):
-    args = pickle.loads(req.data)
-    return pickle.dumps(a.get_result(args['election_id']))
-
-@handler.register
 def compute_result(req):
     #this is soley for the sake of 'offline_runthrough.py'
     args = pickle.loads(req.data)
     return pickle.dumps(a.compute_result(args['election_id']))
-
-@handler.register
-def is_election_running(req):
-    args = pickle.loads(req.data)
-    return pickle.dumps(a.is_election_running(args['election_id']))
 
 @app.route('/api/compute_result', methods=['POST'])
 def compute_result():

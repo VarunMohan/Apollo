@@ -16,6 +16,7 @@ class Registrar:
         self.table = {}
         self.endpoint = endpoint
         self.tallier_endpoints = []
+        self.results = {}
 
     def register_election(self, voter_ids, candidates):
         n_voters = len(voter_ids)
@@ -49,6 +50,31 @@ class Registrar:
     def get_election(self, election_id):
         return self.table[election_id].election, self.table[election_id].tallier_endpoints
 
+    def is_election_running(self, election_id):
+        print("IS REGISTRAR RUNNING QUERY")
+        sys.stdout.flush()
+        if election_id not in self.table:
+            # kind of nonsensical since election hasn't happened yet
+            return False
+        return not self.table[election_id].done
+
+    def end_election(self, election_id):
+        print("END ELECTIOn QUERY")
+        sys.stdout.flush()
+        if election_id in self.results or election_id not in self.table:
+            return False
+        a = ClientAuthority() 
+        result = a.compute_result(election_id)
+        # decoding should probably happen at the tallier
+        self.results[election_id] = result
+        self.table[election_id].done = True
+        return True
+
+    def get_result(self, election_id):
+        if election_id not in self.results:
+            return False
+        return self.results[election_id]
+            
     def add_voter(self, election_id, voter_id, vote):
         if election_id not in self.table or voter_id in self.table[election_id].registrar:
             return False
@@ -67,14 +93,6 @@ class Registrar:
         if record.has_voted or record.vote != vote:
             return False
         record.has_voted = True
-        return True
-
-    def voting_complete(self, election_id):
-        print("Voting Complete for Election", election_id)
-        # will add a publish feature after this
-        if election_id not in self.table or self.table[election_id].done:
-            return False
-        self.table[election_id].done = True
         return True
 
 app = Flask(__name__)
@@ -101,6 +119,21 @@ def get_election(req):
     return pickle.dumps(r.get_election(args['election_id']))
 
 @handler.register
+def is_election_running(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(r.is_election_running(args['election_id']))
+
+@handler.register
+def end_election(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(r.end_election(args['election_id']))
+
+@handler.register
+def get_result(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(r.get_result(args['election_id']))
+
+@handler.register
 def add_voter(req):
     args = pickle.loads(req.data)
     return pickle.dumps(r.add_voter(args['election_id'], args['voter_id'], args['vote']))
@@ -109,11 +142,6 @@ def add_voter(req):
 def confirm_vote(req):
     args = pickle.loads(req.data)
     return pickle.dumps(r.confirm_vote(args['election_id'], args['voter_id'], args['vote']))
-
-@handler.register
-def voting_complete(req):
-    args = pickle.loads(req.data)
-    return pickle.dumps(r.voting_complete(args['election_id']))
 
 @app.route('/')
 def hello_world():
