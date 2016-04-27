@@ -14,9 +14,9 @@ r = ClientRegistrar(r_endpoint)
 
 @app.route('/api/submit_vote', methods=['POST'])
 def submit_vote():
-    e , _ = r.get_election(int(request.form['eid']))
-    r_endpoint = entity_locations.get_registrar_endpoint()
-    t = ClientTallier(entity_locations.get_tallier_endpoints()[0])
+    e , tallier_endpoints = r.get_election(int(request.form['eid']))
+    # can randomize this later
+    t = ClientTallier(tallier_endpoints[0])
     voter = Voter(request.form['voter_id'], r, t, e)
     test = voter.vote(request.form['candidate'])
     return render_template('voting_interface.html')
