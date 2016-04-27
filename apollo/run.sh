@@ -19,7 +19,8 @@ python registrar.py > logs/registrar.log 2>&1 &
 for i in $(eval echo {0..$TALLIER_MAX}); do
     sleep 1
     echo "Starting Tallier $i"
-    python tallier.py $i > logs/tallier$i.log 2>&1 &
+    # later take an argument for concurrent elections
+    python tallier.py $i 3 > logs/tallier$i.log 2>&1 &
 done
 sleep 1
 echo "Starting Voting Interface"

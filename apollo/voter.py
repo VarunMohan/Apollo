@@ -37,7 +37,7 @@ class Voter:
     def vote(self, candidate):
         self.encrypt_vote(candidate)
         if self.registrar.add_voter(self.election.election_id, self.voter_id, self.evote):
-            if self.tallier.send_vote(self.voter_id, self.evote, self.proof):
+            if self.tallier.send_vote(self.voter_id, self.election.election_id, self.evote, self.proof):
             # if self.tallier.send_vote(self.voter_id, encrypted_vote):
                 return True
         return False

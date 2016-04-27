@@ -25,6 +25,7 @@ class Registrar:
         pk, eid = a.create_election()
         election = Election(voter_ids, candidates, pk, eid)
         election_talliers = []
+        # write better scheduler
         for endpoint in self.tallier_endpoints:
             tallier = ClientTallier(endpoint)
             if (tallier.request_election(election, self.endpoint)):
@@ -51,16 +52,12 @@ class Registrar:
         return self.table[election_id].election, self.table[election_id].tallier_endpoints
 
     def is_election_running(self, election_id):
-        print("IS REGISTRAR RUNNING QUERY")
-        sys.stdout.flush()
         if election_id not in self.table:
             # kind of nonsensical since election hasn't happened yet
             return False
         return not self.table[election_id].done
 
     def end_election(self, election_id):
-        print("END ELECTIOn QUERY")
-        sys.stdout.flush()
         if election_id in self.results or election_id not in self.table:
             return False
         a = ClientAuthority() 

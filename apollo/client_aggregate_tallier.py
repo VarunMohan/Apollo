@@ -1,12 +1,14 @@
 import xmlrpc
 import pickle
 import entity_locations
+import sys
 
 class ClientAggregateTallier:
     def __init__(self):
         endpoint = entity_locations.get_aggregate_tallier_endpoint()
         url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/api'
         print('Channel With AggregateTallier: ' + url)
+        sys.stdout.flush()
         self.t = xmlrpc.client.ServerProxy(url)
 
     def register_talliers(self, election_id, tallier_endpoints, registrar_endpoint, pk):

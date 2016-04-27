@@ -1,10 +1,12 @@
 import pickle
+import sys
 import xmlrpc.client
 
 class ClientRegistrar:
     def __init__(self, endpoint):
         url = 'http://' + endpoint.hostname + ':' + str(endpoint.port) + '/api'
         print('Channel With Registrar: ' + url)
+        sys.stdout.flush()
         self.r = xmlrpc.client.ServerProxy(url)
 
     def register_election(self, voter_ids, candidates):
