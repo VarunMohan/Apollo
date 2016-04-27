@@ -1,5 +1,4 @@
 from crypto import paillier
-from election import Election
 from client_tallier import ClientTallier
 from client_aggregate_tallier import ClientAggregateTallier
 import entity_locations
@@ -16,11 +15,12 @@ class Authority:
         self.results = []
         self.endpoint = endpoint
 
-    def create_election(self, voter_ids, candidates):
+    def create_election(self):
         self.keys.append(paillier.gen_keys())
         self.election_running.append(True)
         self.results.append(None)
-        return Election(voter_ids, candidates, self.keys[-1][0], len(self.keys))
+        return (self.keys[-1][0], len(self.keys))
+        # return Election(voter_ids, candidates, self.keys[-1][0], len(self.keys))
 
     def compute_result(self, election_id):
         if not self.election_running[election_id - 1]:
@@ -49,9 +49,8 @@ endpoint = entity_locations.get_authority_endpoint()
 a = Authority(endpoint)
 
 @handler.register
-def create_election(req):
-    args = pickle.loads(req.data)
-    return pickle.dumps(a.create_election(args['voter_ids'], args['candidates']))
+def create_election():
+    return pickle.dumps(a.create_election())
 
 @handler.register
 def get_result(req):

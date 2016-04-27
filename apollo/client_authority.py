@@ -9,9 +9,8 @@ class ClientAuthority:
         print('Channel With Authority: ' + url)
         self.a = xmlrpc.client.ServerProxy(url)
 
-    def create_election(self, voter_ids, candidates):
-        args = {'voter_ids': voter_ids, 'candidates': candidates}
-        resp = self.a.create_election(pickle.dumps(args))
+    def create_election(self):
+        resp = self.a.create_election()
         return pickle.loads(resp.data)
 
     def get_result(self, election_id):

@@ -2,6 +2,7 @@ from client_authority import ClientAuthority
 from client_aggregate_tallier import ClientAggregateTallier
 from client_tallier import ClientTallier
 from client_registrar import ClientRegistrar
+from election import Election
 import entity_locations
 import sys
 from voter import Voter
@@ -20,7 +21,8 @@ class Registrar:
         n_voters = len(voter_ids)
         n_candidates = len(candidates)
         a = ClientAuthority()
-        election = a.create_election(voter_ids, candidates)
+        pk, eid = a.create_election()
+        election = Election(voter_ids, candidates, pk, eid)
         election_talliers = []
         for endpoint in self.tallier_endpoints:
             tallier = ClientTallier(endpoint)
