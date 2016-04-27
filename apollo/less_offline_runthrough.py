@@ -14,14 +14,6 @@ if __name__ == '__main__':
     voter_ids = ['rsridhar', 'kevinzhu', 'vmohan', 'sunl', 'akshayr']
     candidates = ['bernie', 'shillary']
 
-    NUM_VOTERS = len(voter_ids)
-    NUM_CANDIDATES = len(candidates)
-    FREQUENCY = 1
-
-    if len(sys.argv) == 3:
-        NUM_VOTERS = int(sys.argv[1])
-        NUM_CANDIDATES = int(sys.argv[2])
-
     r_endpoint = entity_locations.get_registrar_endpoint()
     r = ClientRegistrar(r_endpoint)
     eid = r.register_election(voter_ids, candidates)
@@ -30,11 +22,7 @@ if __name__ == '__main__':
         print("Could not get an election")
         sys.exit(0)
 
-    e, tallier_endpoints = r.get_election(eid)
-
-    print("Connected to Talliers:")
-    for endpoint in tallier_endpoints:
-        print(endpoint.hostname, str(endpoint.port))
+    e, _ = r.get_election(eid)
 
     while r.is_election_running(eid):
         time.sleep(1)

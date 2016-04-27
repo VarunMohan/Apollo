@@ -59,7 +59,6 @@ python main.py n_voters n_candidates
 NOTE: Add `sys.stdout.flush()` to see the output of stdout in logs
 
 ## TODO
-* Voters from multiple processes (rsridhar)
 * Optimize crypto (sunl)
 * Error Handling (sunl)
 * Malicious tests (sunl)

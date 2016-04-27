@@ -4,4 +4,22 @@
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
 <div class=page>
   <h1>Registrar</h1>
+  {% if eid %}
+    <p>Success! Election ID: {{ eid }}!</p>
+  {% endif %}
+  <h2>Create Election</h2>
+    <form name="register_election" action="/api/register_election" method="post">
+    Voter IDs: <input type="text" name="voter_ids">
+    Candidates: <input type="text" name="candidates">
+    <input type="submit" value="Submit">
+  </form>
+  <br>
+  {% if results %}
+    <p>Election Results: {{ results }}!</p>
+  {% endif %}
+  <h2>View Results</h2>
+    <form name="view_results" action="/api/view_results" method="post">
+    Election ID: <input type="text" name="eid">
+    <input type="submit" value="Submit">
+  </form>
 </div>

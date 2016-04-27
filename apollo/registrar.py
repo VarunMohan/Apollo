@@ -60,7 +60,7 @@ class Registrar:
     def end_election(self, election_id):
         if election_id in self.results or election_id not in self.table:
             return False
-        a = ClientAuthority() 
+        a = ClientAuthority()
         result = a.compute_result(election_id)
         # decoding should probably happen at the tallier
         self.results[election_id] = result
@@ -71,7 +71,7 @@ class Registrar:
         if election_id not in self.results:
             return False
         return self.results[election_id]
-            
+
     def add_voter(self, election_id, voter_id, vote):
         if election_id not in self.table or voter_id in self.table[election_id].registrar:
             return False
@@ -139,6 +139,21 @@ def add_voter(req):
 def confirm_vote(req):
     args = pickle.loads(req.data)
     return pickle.dumps(r.confirm_vote(args['election_id'], args['voter_id'], args['vote']))
+
+@app.route('/api/register_election', methods=['POST'])
+def create_election():
+    # fix this stupid formatting thing
+    voter_ids = request.form['voter_ids'].split(', ')
+    candidates = request.form['candidates'].split(', ')
+    eid = r.register_election(voter_ids, candidates)
+    return render_template('registrar.html', eid = eid)
+
+@app.route('/api/view_results', methods=['POST'])
+def view_results():
+    eid = int(request.form['eid'])
+    e, _ = r.get_election(eid)
+    results = e.decode_result(r.get_result(eid))
+    return render_template('registrar.html', results = str(results))
 
 @app.route('/')
 def hello_world():
