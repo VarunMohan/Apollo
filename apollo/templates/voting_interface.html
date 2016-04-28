@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
 <div class=page>
   <h1>Voting Interface</h1>
+  <p>{{ election_ids }}</p>
   <form name="submit_vote" action="/api/submit_vote" method="post">
     Election ID: <input type="text" name="eid">
     Voter ID: <input type="text" name="voter_id">

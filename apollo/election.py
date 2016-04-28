@@ -1,4 +1,3 @@
-
 class Election:
     def __init__(self, voter_ids, candidates, pk, election_id):
         self.voter_ids = voter_ids

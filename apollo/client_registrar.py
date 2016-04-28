@@ -24,6 +24,10 @@ class ClientRegistrar:
         resp = self.r.get_election(pickle.dumps(args))
         return pickle.loads(resp.data)
 
+    def list_election_ids(self):
+        resp = self.r.list_election_ids()
+        return pickle.loads(resp.data)
+
     def end_election(self, election_id):
         args = {'election_id': election_id}
         resp = self.r.end_election(pickle.dumps(args))
