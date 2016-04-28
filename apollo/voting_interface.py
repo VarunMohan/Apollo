@@ -35,7 +35,12 @@ def end_election():
 @app.route('/')
 def hello_world():
     election_ids = r.list_election_ids()
-    return render_template('voting_interface.html', election_ids = election_ids)
+    if len(election_ids) > 0:
+        e, _ = r.get_election(election_ids[0])
+        candidates = e.candidates
+        return render_template('voting_interface.html', election_ids = election_ids, candidates = candidates)
+    else:
+        return render_template('voting_interface.html', election_ids = election_ids)
 
 if __name__ == '__main__':
     endpoint = entity_locations.get_voting_interface_endpoint()
