@@ -1,6 +1,7 @@
 import Crypto.Util.number as pycrypto
+from crypto import constants
 
-PRIME_SIZE = 1024
+PRIME_SIZE = constants.PRIME_SIZE
 
 def gen_keys():
     p = pycrypto.getPrime(PRIME_SIZE)
