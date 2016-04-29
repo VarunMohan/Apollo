@@ -63,6 +63,9 @@ class Registrar:
             return False, False
         return self.table[election_id].election, self.table[election_id].tallier_endpoints
 
+    def list_election_ids(self):
+        return sorted([key for key in self.table.keys()])
+
     def is_election_running(self, election_id):
         if election_id not in self.table:
             # kind of nonsensical since election hasn't happened yet
@@ -133,6 +136,10 @@ def register_tallier(req):
 def get_election(req):
     args = pickle.loads(req.data)
     return pickle.dumps(r.get_election(args['election_id']))
+
+@handler.register
+def list_election_ids():
+    return pickle.dumps(r.list_election_ids())
 
 @handler.register
 def is_election_running(req):

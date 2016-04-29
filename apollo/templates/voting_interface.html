@@ -4,6 +4,12 @@
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
 <div class=page>
   <h1>Voting Interface</h1>
+  <p> Elections you can vote in: </p>
+  <p>{{ election_ids }}</p>
+  {% if candidates %}
+    <p>{{ candidates }}</p>
+  {% endif %}
+  <br>
   {% if submit_vote_msg %}
   <p>{{ submit_vote_msg }}</p>
   {% endif %}

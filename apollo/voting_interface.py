@@ -52,10 +52,15 @@ def end_election():
         message = 'Something went wrong, please try again'
     return render_template('voting_interface.html', end_election_msg = message)
 
-
 @app.route('/')
 def hello_world():
-    return render_template('voting_interface.html')
+    election_ids = r.list_election_ids()
+    if len(election_ids) > 0:
+        e, _ = r.get_election(election_ids[0])
+        candidates = e.candidates
+        return render_template('voting_interface.html', election_ids = election_ids, candidates = candidates)
+    else:
+        return render_template('voting_interface.html', election_ids = election_ids)
 
 if __name__ == '__main__':
     endpoint = entity_locations.get_voting_interface_endpoint()
