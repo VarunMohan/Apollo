@@ -6,6 +6,7 @@ import sys
 from voter import Voter
 
 import pickle
+import random
 from flask import Flask, render_template, request
 from flaskext.xmlrpc import XMLRPCHandler, Fault
 
@@ -18,19 +19,40 @@ a = ClientAuthority()
 
 @app.route('/api/submit_vote', methods=['POST'])
 def submit_vote():
-    e , tallier_endpoints = r.get_election(int(request.form['eid']))
-    # can randomize this later
-    t = ClientTallier(tallier_endpoints[0])
-    voter = Voter(request.form['voter_id'], r, t, e)
-    test = voter.vote(request.form['candidate'])
-    return render_template('voting_interface.html')
+    message = 'Success!'
+    try:
+        e , tallier_endpoints = r.get_election(int(request.form['eid']))
+        if not e:
+            message = 'Invalid Election ID'
+            return render_template('voting_interface.html', submit_vote_msg = message)
+
+        t = ClientTallier(random.choice(tallier_endpoints))
+        voter = Voter(request.form['voter_id'], r, t, e)
+
+        success = voter.vote(request.form['candidate'])
+        if not success:
+            message = 'Vote not cast: your vote was either invalid or already cast'
+    except Exception:
+        message = 'Something went wrong, please try again'
+
+    return render_template('voting_interface.html', submit_vote_msg = message)
+
+
 
 @app.route('/api/end_election', methods=['POST'])
-def end_election():  
-    r.end_election(int(request.form['election_id']))
-    return render_template('voting_interface.html')
+def end_election():
+    message = 'Success!'
+    try:
+        success = r.end_election(int(request.form['election_id']))
+        if not success:
+            message = 'Invalid Election ID'
+    except ValueError:
+        message = 'Election ID must be an integer'
+    except Exception:
+        message = 'Something went wrong, please try again'
+    return render_template('voting_interface.html', end_election_msg = message)
 
-    
+
 @app.route('/')
 def hello_world():
     return render_template('voting_interface.html')

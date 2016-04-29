@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-    #By default we have four talliers
+    #By default we have five talliers
     TALLIER_MAX=4
 else
     TALLIER_MAX=$(($1-1))

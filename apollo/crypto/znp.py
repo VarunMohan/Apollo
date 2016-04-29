@@ -20,7 +20,7 @@ def gen_proof(pk, u, esum, real, v):
         else:
             r = pycrypto.getRandomInteger(PRIME_SIZE*2)
             newa = pow(r, n, n * n)
-            
+
             a.append(newa)
             z.append(None)
             e.append(0)
@@ -29,7 +29,7 @@ def gen_proof(pk, u, esum, real, v):
     z[real] = (r * pow(v, e[real], n * n)) % (n * n)
 
     return (u, a, e, z, esum)
-            
+
 def check_proof(pk, u, a, e, z, esum):
     n = pk.n
     if (sum(e) % pow(2, PRIME_SIZE)) != esum:

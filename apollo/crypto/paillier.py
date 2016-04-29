@@ -14,7 +14,7 @@ def gen_keys():
             if pycrypto.GCD(c, n) == 1:
                 mu = pycrypto.inverse(c, n)
                 break
-    
+
     return PublicKey(n,g), PrivateKey(l, mu)
 
 def encrypt(pk, msg):

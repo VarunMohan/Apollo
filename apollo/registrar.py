@@ -59,6 +59,8 @@ class Registrar:
         return True
 
     def get_election(self, election_id):
+        if election_id not in self.table:
+            return False, False
         return self.table[election_id].election, self.table[election_id].tallier_endpoints
 
     def is_election_running(self, election_id):
