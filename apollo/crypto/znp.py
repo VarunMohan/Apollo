@@ -51,7 +51,7 @@ def check_proof(pk, u, a, e, z, esum):
     return True
 
 # generates a ZNP that decryption was done properly, given a random number chal by voter
-def decrypt_proof(pk, sk, cipher, r, chal):
+def decrypt_proof(pk, sk, cipher, chal):
     n = pk.n
     msg = paillier.decrypt(pk, sk, cipher)
     rn = (cipher * pycrypto.inverse(pow(pk.g, msg, n * n), n * n)) % (n * n)
