@@ -1,8 +1,13 @@
 import Crypto.Util.number as pycrypto
 from crypto import constants
+from crypto import paillier
 
 PRIME_SIZE = constants.PRIME_SIZE
 
+
+# takes in a public key pk, sequence of cipher texts u, sum of e's (random number),
+# index of the real cipher text and the random number used for the vote v
+# generates a proof that at least one ciphertext is real
 def gen_proof(pk, u, esum, real, v):
     a = []
     z = []
@@ -31,6 +36,9 @@ def gen_proof(pk, u, esum, real, v):
 
     return (u, a, e, z, esum)
 
+# checks the validity of a proof that at least one cipher text is real by verifying that
+# sum e = esum
+# z_i^n = a_i * u_i^e_i
 def check_proof(pk, u, a, e, z, esum):
     n = pk.n
     if (sum(e) % pow(2, PRIME_SIZE)) != esum:
@@ -41,3 +49,26 @@ def check_proof(pk, u, a, e, z, esum):
             return False
 
     return True
+
+# generates a ZNP that decryption was done properly, given a random number chal by voter
+def decrypt_proof(pk, sk, cipher, r, chal):
+    n = pk.n
+    msg = paillier.decrypt(pk, sk, cipher)
+    rn = (cipher * pycrypto.inverse(pow(pk.g, msg, n * n), n * n)) % (n * n)
+    r = pow(rn, pycrypto.inverse(n, sk.l), n * n) # generates bogus if r^n not nth power
+    
+    rand = pycrypto.getRandomInteger(PRIME_SIZE * 2)
+    randn = pow(rand, n, n * n)
+    
+    z = rand * pow(r, chal, n * n)
+    
+    return (cipher, randn, chall, z)
+
+# given a proof, checks decryption was done properly
+def check_decrypt(pk, cipher, rand, chall, z):
+    n = pk.n
+    if pow(z, n, n * n) == (rand * pow(cipher, chall, n * n)) % (n * n):
+        return True
+
+    return False
+    
