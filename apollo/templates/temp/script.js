@@ -4,7 +4,6 @@
     var checked = null;
 
     var check = function(id) {
-        console.log(checked);
         if(checked !== id) {
             document.getElementById(id).classList.remove("not-clicked");
             document.getElementById(id).classList.add("clicked");
