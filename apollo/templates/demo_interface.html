@@ -27,7 +27,9 @@
                 <h1 class="display-3 title">Election 2016</h1>
                 <p class="lead">The race for the White House</p>
                 <button id="submit" type="button" class="btn btn-lg btn-secondary" disabled>Submit Vote</button>
+                {% if owner %}
                 <button id="end-election" type="button" class="btn btn-lg btn-warning">End Election</button>
+                {% endif %}
             </div>
         </div>
         <div class="container">

@@ -9,8 +9,8 @@ class ClientRegistrar:
         sys.stdout.flush()
         self.r = xmlrpc.client.ServerProxy(url)
 
-    def register_election(self, voter_ids, candidates):
-        args = {'voter_ids': voter_ids, 'candidates': candidates}
+    def register_election(self, voter_ids, candidates, owner):
+        args = {'voter_ids': voter_ids, 'candidates': candidates, 'owner': owner}
         resp = self.r.register_election(pickle.dumps(args))
         return pickle.loads(resp.data)
 
