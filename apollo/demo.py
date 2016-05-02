@@ -4,25 +4,22 @@ from client_authority import ClientAuthority
 import entity_locations
 from voter import Voter
 
-import pickle
 import random
-import sys
-import hashlib
+import json
+from hashlib import sha256
 from string import ascii_lowercase
 from flask import Flask, render_template, request, session, redirect
 from flaskext.xmlrpc import XMLRPCHandler, Fault
 
 app = Flask(__name__)
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 r_endpoint = entity_locations.get_registrar_endpoint()
-# may want to remove the endpoint location
 r = ClientRegistrar(r_endpoint)
 voter_ids = ['rsridhar', 'kevinzhu', 'vmohan', 'sunl', 'akshayr']
 candidates = ['clinton', 'cruz', 'kasich', 'sanders', 'trump']
 eid = r.register_election(voter_ids, candidates)
 e, tallier_endpoints = r.get_election(eid)
-
+config = None
 
 @app.route('/api/submit_vote', methods=['POST'])
 def submit_vote():
@@ -67,28 +64,30 @@ def hello_world():
         name = request.args['name']
 
         key = session['key']
-        secret = 'password'
+        secret = config['authSecret']
         to_hash = (email + key + secret).encode('utf-8')
-        correct_token = hashlib.sha256(to_hash).hexdigest()
+        correct_token = sha256(to_hash).hexdigest()
 
         if token == correct_token:
             message = 'Success!'
-            session['username'] = email[:-8]
-            print(session['username'])
+            session['username'] = email[:-len('@mit.edu')]
         else:
             message = 'Authentication Failed'
-        print(message)
 
         if not r.is_election_running(eid):
             return render_template('demo_results.html', username = session['username'])
         else:
             return render_template('demo_interface.html', username = session['username'])
     else:
-        authUrl = 'https://rsridhar.scripts.mit.edu:444/auth.php'
+        authURL = config['authURL']
         key = ''.join(random.choice(ascii_lowercase) for i in range(10))
-        linkUrl = authUrl + '?key=' + key
+        linkURL = authURL + '?key=' + key
         session['key'] = key
-        return redirect(linkUrl)
+        return redirect(linkURL)
 
 if __name__ == '__main__':
+    with open('config.json') as f:
+        config = json.load(f)
+
+    app.secret_key = config['cookieSecret']
     app.run(host="localhost", port=8192, debug=False)

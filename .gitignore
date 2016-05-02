@@ -91,5 +91,3 @@ ENV/
 out_*
 *.log
 
-# Secret files
-apollo/secret.txt
