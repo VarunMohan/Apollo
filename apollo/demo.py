@@ -31,8 +31,6 @@ def submit_vote():
         success = voter.vote(request.form['candidate'])
         if not success:
             message = "Something went wrong, please try again"
-        else:
-            session['voted'] = True
 
     except Exception:
         message = 'Something went wrong, please try again'

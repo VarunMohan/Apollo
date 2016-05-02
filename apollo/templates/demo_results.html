@@ -92,7 +92,6 @@
             };
     
             var generateResults = function(results) {
-                console.log(results);
                 var dict = {"clinton": results.clinton, "cruz": results.cruz, "kasich": results.kasich, "sanders": results.sanders, "trump": results.trump};
                 var items = Object.keys(dict).map(function(key) {
                     return [key, dict[key]];
@@ -100,8 +99,6 @@
                 items.sort(function(first, second) {
                     return second[1] - first[1];
                 });
-                console.log(dict);
-                console.log(items);
                 var total = dict["clinton"] + dict["cruz"] + dict["kasich"] + dict["sanders"] + dict["trump"];
                 var election_results = document.getElementById("election-results");
                 for(var i = 0; i < items.length; i++) {
