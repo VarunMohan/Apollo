@@ -9,7 +9,7 @@ body {
 }
 
 .background {
-    background-image: url("flag-background.jpg");
+    background-image: url("img/flag-background.jpg");
     position: absolute;
     top: 54px;
     left: 0;

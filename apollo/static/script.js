@@ -30,4 +30,36 @@
             });
         }());
     }
+
+    var sendVote = function(checked) {
+        var XHR = new XMLHttpRequest();
+        var FD = new FormData();
+        FD.append("candidate", checked);
+        XHR.open("POST", "/api/submit_vote");
+        XHR.send(FD);
+    }
+
+    var submit_button = document.getElementById("submit");
+    submit_button.addEventListener("click", function() {
+        sendVote(checked);
+    });
+
+    var endElection = function() {
+        var XHR = new XMLHttpRequest();
+        XHR.open("POST", "/api/end_election");
+        XHR.responseType = "text";
+        XHR.onload = function() {
+            if(XHR.readyState === XHR.DONE) {
+                if(XHR.status === 200) {
+                    window.location.reload(true);
+                }
+            }
+        }
+        XHR.send();
+    }
+
+    var end_election_button = document.getElementById("end-election");
+    end_election_button.addEventListener("click", function() {
+        endElection();
+    });
 })();
