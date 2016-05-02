@@ -55,6 +55,26 @@ def end_election():
 
     return message
 
+@app.route('/login')
+def login():
+    # coming back from auth.php (we think)
+    email = request.args['email']
+    token = request.args['token']
+    name = request.args['name']
+
+    key = session['key']
+    secret = config['authSecret']
+    to_hash = (email + key + secret).encode('utf-8')
+    correct_token = sha256(to_hash).hexdigest()
+
+    if token == correct_token:
+        message = 'Success!'
+        session['username'] = email[:-len('@mit.edu')]
+    else:
+        message = 'Authentication Failed'
+
+    return '<script>window.location.href = "../"</script>'
+
 @app.route('/')
 def hello_world():
     results = json.JSONEncoder().encode(e.decode_result(r.get_result(eid)))
@@ -64,29 +84,6 @@ def hello_world():
             return render_template('demo_results.html', username = session['username'], results = results)
         else:
             owner_flag = (session['username'] == owner)
-            return render_template('demo_interface.html', username = session['username'], owner = owner_flag)
-    elif 'email' in request.args:
-        # coming back from auth.php (we think)
-        email = request.args['email']
-        token = request.args['token']
-        name = request.args['name']
-
-        key = session['key']
-        secret = config['authSecret']
-        to_hash = (email + key + secret).encode('utf-8')
-        correct_token = sha256(to_hash).hexdigest()
-
-        if token == correct_token:
-            message = 'Success!'
-            session['username'] = email[:-len('@mit.edu')]
-        else:
-            message = 'Authentication Failed'
-
-        owner_flag = (session['username'] == owner)
-
-        if not r.is_election_running(eid):
-            return render_template('demo_results.html', username = session['username'], results = results)
-        else:
             return render_template('demo_interface.html', username = session['username'], owner = owner_flag)
     else:
         authURL = config['authURL']
