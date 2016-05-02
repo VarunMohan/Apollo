@@ -4,6 +4,7 @@ from client_authority import ClientAuthority
 import entity_locations
 import sys
 from voter import Voter
+import json
 
 import pickle
 import random
@@ -11,7 +12,6 @@ from flask import Flask, render_template, request, session, redirect
 from flaskext.xmlrpc import XMLRPCHandler, Fault
 
 app = Flask(__name__)
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 r_endpoint = entity_locations.get_registrar_endpoint()
 # may want to remove the endpoint location
@@ -51,15 +51,12 @@ def end_election():
 
     return message
 
-
-
-
 @app.route('/')
 def hello_world():
     if r.is_election_running(eid):
         return render_template('demo_interface.html')
     else:
-        return render_template('demo_results.html')
+        return render_template('demo_results.html', results = json.JSONEncoder().encode(e.decode_result(r.get_result(eid))))
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=8192, debug=False)
+    app.run(host="localhost", port=8192, debug=True)
