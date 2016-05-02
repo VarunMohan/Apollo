@@ -101,6 +101,7 @@
                 });
                 var total = dict["clinton"] + dict["cruz"] + dict["kasich"] + dict["sanders"] + dict["trump"];
                 var election_results = document.getElementById("election-results");
+                var winning_vote_num = items[0][1];
                 for(var i = 0; i < items.length; i++) {
                     var percent;
                     if(total === 0) {
@@ -109,7 +110,7 @@
                     else {
                         percent = items[i][1] / total * 100;
                     }
-                    if(i === 0) {
+                    if(items[i][1] === winning_vote_num) {
                         election_results.innerHTML += generateWinnerHTML(items[i][0], items[i][1], percent);
                     }
                     else {
