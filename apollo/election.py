@@ -1,7 +1,8 @@
 class Election:
-    def __init__(self, voter_ids, candidates, pk, election_id):
+    def __init__(self, voter_ids, candidates, owner, pk, election_id):
         self.voter_ids = voter_ids
         self.candidates = candidates
+        self.owner = owner
         self.n_voters = len(voter_ids)
         self.n_candidates = len(candidates)
         self.pk = pk

@@ -16,9 +16,10 @@ app = Flask(__name__)
 
 r_endpoint = entity_locations.get_registrar_endpoint()
 r = ClientRegistrar(r_endpoint)
+owner = 'kevinzhu'
 voter_ids = ['rsridhar', 'kevinzhu', 'vmohan', 'sunl', 'akshayr']
 candidates = ['clinton', 'cruz', 'kasich', 'sanders', 'trump']
-eid = r.register_election(voter_ids, candidates)
+eid = r.register_election(voter_ids, candidates, owner)
 e, tallier_endpoints = r.get_election(eid)
 config = None
 
@@ -41,6 +42,9 @@ def submit_vote():
 
 @app.route('/api/end_election', methods=['POST'])
 def end_election():
+    if session['username'] != owner:
+        return 'You are not the election owner.'
+
     message = 'Success!'
     try:
         success = r.end_election(eid)
@@ -55,11 +59,14 @@ def end_election():
 
 @app.route('/')
 def hello_world():
+    results = json.JSONEncoder().encode(e.decode_result(r.get_result(eid)))
+
     if 'username' in session:
         if not r.is_election_running(eid):
-            return render_template('demo_results.html', username = session['username'], results = json.JSONEncoder().encode(e.decode_result(r.get_result(eid))))
+            return render_template('demo_results.html', username = session['username'], results = results)
         else:
-            return render_template('demo_interface.html', username = session['username'])
+            owner_flag = (session['username'] == owner)
+            return render_template('demo_interface.html', username = session['username'], owner = owner_flag)
     elif 'email' in request.args:
         # coming back from auth.php (we think)
         email = request.args['email']
@@ -77,10 +84,12 @@ def hello_world():
         else:
             message = 'Authentication Failed'
 
+        owner_flag = (session['username'] == owner)
+
         if not r.is_election_running(eid):
-            return render_template('demo_results.html', username = session['username'], results = json.JSONEncoder().encode(e.decode_result(r.get_result(eid))))
+            return render_template('demo_results.html', username = session['username'], results = results)
         else:
-            return render_template('demo_interface.html', username = session['username'])
+            return render_template('demo_interface.html', username = session['username'], owner = owner_flag)
     else:
         authURL = config['authURL']
         key = ''.join(random.choice(ascii_lowercase) for i in range(10))
