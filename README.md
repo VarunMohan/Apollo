@@ -42,9 +42,11 @@ Execute the following script to run the system with n talliers.
 ./run.sh n
 ```
 
-There are now 3 ways to interact with the running system. The preferred is to use `localhost:7000` to create an election, and use `localhost:7777` to cast your votes.
+There are now 4 ways to interact with the running system. The preferred is to use `localhost:7000` to create an election, and use `localhost:7777` to cast your votes.
 
 Alternatively, `less-offline-runthrough.py` will create an election with preset candidates and voter ids. You must go to `localhost:7777` to cast your vote and end the election.
+
+Running `demo.py` will start an election using pre-set candidates corresponding to the 2016 US Presidential Race, with a pre-set list of valid voter ids.
 
 Finally, `offline-runthrough.py` will create an election and execute votes, requiring no website interaction.
 
@@ -55,10 +57,7 @@ Finally, `offline-runthrough.py` will create an election and execute votes, requ
 * Optimize crypto (sunl)
 * Error Handling (sunl)
 * Malicious tests (sunl)
-* Pretty website templates (kevinzhu)
-* Authenticate voters (rsridhar)
 * ZNP for end-to-end integrity check (sunl)
 * Client-side encryption of vote (kevinzhu)
 * Unexposed API (vmohan, sunl)
-* Concept of Election Owner (rsridhar)
 * Written Report (kevinzhu)
