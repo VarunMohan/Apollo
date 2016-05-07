@@ -62,12 +62,12 @@ def decrypt_proof(pk, sk, cipher, chal):
     
     z = rand * pow(r, chal, n * n)
     
-    return (cipher, randn, chall, z)
+    return (msg, cipher, randn, chall, z)
 
 # given a proof, checks decryption was done properly
-def check_decrypt(pk, cipher, rand, chall, z):
+def check_decrypt(pk, msg, cipher, rand, chall, z):
     n = pk.n
-    if pow(z, n, n * n) == (rand * pow(cipher, chall, n * n)) % (n * n):
+    if pow(z, n, n * n) == ((rand * pow((cipher * pycrypto.inverse(pow(pk.g, msg, n * n), n * n)), chall, n * n))) % (n * n)):
         return True
 
     return False
