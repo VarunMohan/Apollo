@@ -18,12 +18,12 @@ class Registrar:
         self.tallier_endpoints = []
         self.results = {}
 
-    def register_election(self, voter_ids, candidates):
+    def register_election(self, voter_ids, candidates, owner):
         n_voters = len(voter_ids)
         n_candidates = len(candidates)
         a = ClientAuthority()
         pk, eid = a.create_election()
-        election = Election(voter_ids, candidates, pk, eid)
+        election = Election(voter_ids, candidates, owner, pk, eid)
         election_talliers = []
         # schedule talliers based on load
         self.tallier_endpoints.sort(key=lambda x: x[0])
@@ -123,7 +123,7 @@ r = Registrar(endpoint)
 @handler.register
 def register_election(req):
     args = pickle.loads(req.data)
-    return pickle.dumps(r.register_election(args['voter_ids'], args['candidates']))
+    return pickle.dumps(r.register_election(args['voter_ids'], args['candidates'], args['owner']))
 
 @handler.register
 def register_tallier(req):
@@ -171,7 +171,7 @@ def create_election():
     # fix this stupid formatting thing
     voter_ids = request.form['voter_ids'].split(', ')
     candidates = request.form['candidates'].split(', ')
-    eid = r.register_election(voter_ids, candidates)
+    eid = r.register_election(voter_ids, candidates, 'rsridhar')
     return render_template('registrar.html', eid = eid)
 
 @app.route('/api/view_results', methods=['POST'])

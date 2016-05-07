@@ -2,11 +2,12 @@
 
 if [ -z "$1" ]; then
     #By default we have five talliers
-    TALLIER_MAX=4
+    TALLIER_MAX=1
 else
     TALLIER_MAX=$(($1-1))
 fi
 
+trap "killall INT python" EXIT
 killall INT python > /dev/null 2>&1
 echo "Starting Aggregate Tallier"
 python aggregate_tallier.py > logs/aggregate_tallier.log 2>&1 &
@@ -23,8 +24,8 @@ for i in $(eval echo {0..$TALLIER_MAX}); do
     python tallier.py $i 3 > logs/tallier$i.log 2>&1 &
 done
 sleep 1
-echo "Starting Voting Interface"
-python voting_interface.py > logs/voting_interface.log 2>&1 &
-sleep 1
+#echo "Starting Voting Interface"
+#python voting_interface.py > logs/voting_interface.log 2>&1 &
+#sleep 1
 
 # Note sleep is selected to make sure all servers are ready to listen on their ports (May need to increase/decrease duration)

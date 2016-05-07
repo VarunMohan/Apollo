@@ -7,7 +7,7 @@
         <title>Voting</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-        <link rel="stylesheet" href="temp/stylesheet.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora" type="text/css">
     </head>
     <body>
@@ -17,7 +17,7 @@
                 <div class="nav navbar-nav">
                     <a class="nav-item nav-link active" href="">Home <span class="sr-only">(current)</span></a>
                     <a class="nav-item nav-link" href="">About</a>
-                    <p class="nav-item pull-xs-right">rsridhar@mit.edu</p>
+                    <p class="nav-item pull-xs-right">{{ username }}@mit.edu</p>
                 </div>
             </div>
         </nav>
@@ -27,14 +27,17 @@
                 <h1 class="display-3 title">Election 2016</h1>
                 <p class="lead">The race for the White House</p>
                 <button id="submit" type="button" class="btn btn-lg btn-secondary" disabled>Submit Vote</button>
+                {% if owner %}
+                <button id="end-election" type="button" class="btn btn-lg btn-warning">End Election</button>
+                {% endif %}
             </div>
         </div>
         <div class="container">
             <div class="row">
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div id="clinton" class="card not-clicked">
+                    <div id="clinton" class="card card-candidate not-clicked">
                         <div class="image-container">
-                            <img class="card-img-top" src="temp/clinton.jpg" alt="Hillary Clinton">
+                            <img class="card-img-top" src="{{ url_for('static', filename='img/clinton.jpg') }}" alt="Hillary Clinton">
                             <div class="after">
                                 <span class="check">
                                     <i class="fa fa-check" aria-hidden="true"></i>
@@ -48,9 +51,9 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div id="cruz" class="card not-clicked">
+                    <div id="cruz" class="card card-candidate not-clicked">
                         <div class="image-container">
-                            <img class="card-img-top" src="temp/cruz.jpg" alt="Ted Cruz">
+                            <img class="card-img-top" src="{{ url_for('static', filename='img/cruz.jpg') }}" alt="Ted Cruz">
                             <div class="after">
                                 <span class="check">
                                     <i class="fa fa-check" aria-hidden="true"></i>
@@ -64,9 +67,9 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div id="kasich" class="card not-clicked">
+                    <div id="kasich" class="card card-candidate not-clicked">
                         <div class="image-container">
-                            <img class="card-img-top" src="temp/kasich.jpg" alt="John Kasich">
+                            <img class="card-img-top" src="{{ url_for('static', filename='img/kasich.jpg') }}" alt="John Kasich">
                             <div class="after">
                                 <span class="check">
                                     <i class="fa fa-check" aria-hidden="true"></i>
@@ -80,9 +83,9 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div id="sanders" class="card not-clicked">
+                    <div id="sanders" class="card card-candidate not-clicked">
                         <div class="image-container">
-                            <img class="card-img-top" src="temp/sanders.jpg" alt="Bernie Sanders">
+                            <img class="card-img-top" src="{{ url_for('static', filename='img/sanders.jpg') }}" alt="Bernie Sanders">
                             <div class="after">
                                 <span class="check">
                                     <i class="fa fa-check" aria-hidden="true"></i>
@@ -96,9 +99,9 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div id="trump" class="card not-clicked">
+                    <div id="trump" class="card card-candidate not-clicked">
                         <div class="image-container">
-                            <img class="card-img-top" src="temp/trump.jpg" alt="Donald Trump">
+                            <img class="card-img-top" src="{{ url_for('static', filename='img/trump.jpg') }}" alt="Donald Trump">
                             <div class="after">
                                 <span class="check">
                                     <i class="fa fa-check" aria-hidden="true"></i>
@@ -120,6 +123,6 @@
         </footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
-        <script src="temp/script.js"></script>
+        <script src="{{ url_for('static', filename='election_script.js') }}"></script>
     </body>
 </html>

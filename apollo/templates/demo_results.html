@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Voting Results</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora" type="text/css">
+    </head>
+    <body>
+        <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
+            <div class="container">
+                <a class="navbar-brand" href="">Apollo</a>
+                <div class="nav navbar-nav">
+                    <a class="nav-item nav-link active" href="">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="">About</a>
+                    <p class="nav-item pull-xs-right">{{ username }}@mit.edu</p>
+                </div>
+            </div>
+        </nav>
+        <div class="background"></div>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-3 title">Election 2016</h1>
+                <p class="lead">The race for the White House</p>
+            </div>
+        </div>
+        <div id="election-results" class="container">
+        </div>
+        <script type="text/javascript">
+            var full_names = {"clinton": "Hillary Clinton", "cruz": "Ted Cruz", "kasich": "John Kasich", "sanders": "Bernie Sanders", "trump": "Donald Trump"};
+            var images = {"clinton": "{{ url_for('static', filename='img/clinton.jpg') }}", "cruz": "{{ url_for('static', filename='img/cruz.jpg') }}", "kasich": "{{ url_for('static', filename='img/kasich.jpg') }}", "sanders": "{{ url_for('static', filename='img/sanders.jpg') }}", "trump": "{{ url_for('static', filename='img/trump.jpg') }}"};
+            console.log(images);
+            var descriptions = {"clinton": "For the past several decades, Mrs. Clinton, 68, has lived in the public eye as she has evolved. She has been a political spouse, the scorned wife of an embattled president, a senator who surprised her rivals by working across the aisle, and a losing presidential candidate in 2008 who went on to serve in the administration of Barack Obama, the man who had bested her.", 
+                                "cruz": "A first-term senator, Mr. Cruz wasted no time establishing himself as a favorite of far-right and evangelical Republicans. Since his election to the Senate in 2012, he has had an outsize impact, leading the effort behind the government shutdown in 2013.", 
+                                "kasich": "With a long career in elected office, Mr. Kasich presents himself as an experienced and blunt leader who is well versed in balancing budgets. Now in his second term as the governor of a swing state, he also spent 18 years in Congress, where he rose to lead the House Budget Committee.", 
+                                "sanders": "Calling himself a Democratic socialist, Mr. Sanders has served in Congress as an independent from Vermont for more than two decades. Far to the left in his politics and sometimes grumpy in his demeanor, he is asking voters to join him in what he has framed as a political revolution, appealing to progressives frustrated with big challenges like income inequality.", 
+                                "trump": "A billionaire businessman who made his fortune as a New York real estate developer before turning to reality television, Mr. Trump promises to use his deal-making prowess to enrich America. He has vowed to build a wall along the southern border, slash taxes and crush ISIS."};
+    
+            var generateWinnerHTML = function(winner, votes, percent) {
+                var votes_string = 'votes';
+                if(votes === 1) {
+                    votes_string = 'vote';
+                }
+                return '<div class="card card-winner">' + 
+                           '<img class="card-img-left img-winner" src="' + images[winner] + '" alt="' + full_names[winner] + '">' + 
+                           '<div class="card-inline-block">' + 
+                               '<h3 class="card-title title card-title-winner">' + full_names[winner] + '</h3>' + 
+                               '<p class="card-text">' + descriptions[winner] + '</p>' + 
+                               '<progress class="progress" value="' + percent + '" max="100">' + percent + '%</progress>' + 
+                               '<h3 class="stats">' + 
+                                   '<div class="votes">' + 
+                                       votes + ' ' + votes_string + 
+                                   '</div><div class="percentage">' + 
+                                       percent + '%' + 
+                                   '</div>' + 
+                               '</h3>' + 
+                           '</div>' + 
+                       '</div>';
+            };
+    
+            var generateLoserHTML = function(loser, rank, votes, percent) {
+                var votes_string = 'votes';
+                if(votes === 1) {
+                    votes_string = 'vote';
+                }
+                return '<div class="labeled-card">' + 
+                           '<div class="number-label">' + 
+                               '<div class="number">' + 
+                                   rank + '.' + 
+                               '</div>' + 
+                           '</div>' + 
+                           '<div class="card card-loser">' + 
+                               '<img class="card-img-left img-loser" src="' + images[loser] + '" alt="' + full_names[loser] + '">' + 
+                               '<div class="card-inline-block">' + 
+                                   '<h3 class="card-title title">' + full_names[loser] + '</h3>' + 
+                                   '<p class="card-text">' + descriptions[loser] + '</p>' + 
+                                   '<progress class="progress" value="' + percent + '" max="100">' + percent + '%</progress>' + 
+                                   '<h5 class="stats">' + 
+                                       '<div class="votes">' + 
+                                           votes + ' ' + votes_string + 
+                                       '</div><div class="percentage">' + 
+                                           percent + '%' + 
+                                       '</div>' + 
+                                   '</h5>' + 
+                               '</div>' + 
+                           '</div>' + 
+                       '</div>';
+            };
+    
+            var generateResults = function(results) {
+                var dict = {"clinton": results.clinton, "cruz": results.cruz, "kasich": results.kasich, "sanders": results.sanders, "trump": results.trump};
+                var items = Object.keys(dict).map(function(key) {
+                    return [key, dict[key]];
+                });
+                items.sort(function(first, second) {
+                    return second[1] - first[1];
+                });
+                var total = dict["clinton"] + dict["cruz"] + dict["kasich"] + dict["sanders"] + dict["trump"];
+                var election_results = document.getElementById("election-results");
+                var winning_vote_num = items[0][1];
+                for(var i = 0; i < items.length; i++) {
+                    var percent;
+                    if(total === 0) {
+                        percent = 0;
+                    }
+                    else {
+                        percent = items[i][1] / total * 100;
+                    }
+                    if(items[i][1] === winning_vote_num) {
+                        election_results.innerHTML += generateWinnerHTML(items[i][0], items[i][1], percent);
+                    }
+                    else {
+                        election_results.innerHTML += generateLoserHTML(items[i][0], i + 1, items[i][1], percent);
+                    }
+                }
+            }
+            window.onload = generateResults({{ results|safe }});
+        </script>
+        <footer class="text-muted">
+            <div class="container">
+                <p class="pull-xs-right">© 2016 Apollo</p>
+            </div>
+        </footer>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
+        <!--<script src="{{ url_for('static', filename='results_script.js') }}"></script>-->
+    </body>
+</html>

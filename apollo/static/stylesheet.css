@@ -3,16 +3,16 @@ body {
 }
 
 .navbar-nav p {
-    margin-bottom: 0px;
+    margin-bottom: 0;
     padding-top: .425rem;
     padding-bottom: .425rem;
 }
 
 .background {
-    background-image: url("flag-background.jpg");
+    background-image: url("img/flag-background.jpg");
     position: absolute;
     top: 54px;
-    left: 0px;
+    left: 0;
     height: 500px;
     width: 100%;
     background-repeat: no-repeat;
@@ -41,12 +41,12 @@ button, a, p {
     font-family: "Avenir", sans-serif;
 }
 
-.card {
+.card-candidate {
     cursor: pointer;
     transition: all 0.1s ease-in-out;
 }
 
-.card:hover {
+.card-candidate:hover {
     background-color: #f7f7f7;
 }
 
@@ -98,7 +98,7 @@ button, a, p {
 
 .card-img-top {
     width: 100%;
-    height: 255px;
+    height: 253px;
     object-fit: cover;
 }
 
@@ -119,4 +119,68 @@ footer p {
 
 .text-muted {
     color: #818a91;
+}
+
+.card-img-left {
+    display: inline-block;
+    border-radius: 0.25rem 0 0 0.25rem;
+    object-fit: cover;
+}
+
+.card-winner {
+    display: flex;
+}
+
+.img-winner {
+    width: 328px;
+    height: 328px;
+}
+
+.card-inline-block {
+    padding: 1.25rem;
+}
+
+.card-title-winner {
+    font-size: 56px;
+}
+
+.card-loser {
+    display: flex;
+}
+
+.img-loser {
+    width: 253px;
+    height: 253px;
+}
+
+.labeled-card {
+    display: flex;
+}
+
+.number-label {
+    width: 75px;
+    flex: none;
+}
+
+.number {
+    font-size: 36px;
+    font-family: "Lora", serif;
+    vertical-align: middle;
+    line-height: 253px;
+    text-align: center;
+}
+
+.stats {
+    font-family: "Lora", serif;
+}
+
+.votes {
+    display: inline-block;
+    padding-right: 0.8rem;
+    border-right: 1px solid black;
+}
+
+.percentage {
+    display: inline-block;
+    padding-left: 0.8rem;
 }
