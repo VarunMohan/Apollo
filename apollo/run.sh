@@ -7,6 +7,7 @@ else
     TALLIER_MAX=$(($1-1))
 fi
 
+trap "killall INT python" EXIT
 killall INT python > /dev/null 2>&1
 echo "Starting Aggregate Tallier"
 python aggregate_tallier.py > logs/aggregate_tallier.log 2>&1 &
