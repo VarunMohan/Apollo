@@ -65,6 +65,7 @@ var sendVote = function(evote, proof) {
                     submit_button.innerHTML = "Vote Submitted";
                     submit_button.classList.remove("btn-secondary");
                     submit_button.classList.add("btn-success");
+                    document.cookie = "evote=" + evote;
                 }
                 else {
                     submit_button.innerHTML = "Invalid Vote";

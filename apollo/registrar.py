@@ -94,6 +94,11 @@ class Registrar:
             return False
         return self.results[election_id]
 
+    def get_election_votes(self, election_id):
+        if election_id not in self.results:
+            return False
+        return [x.vote for x in self.table[election_id].registrar.values()]
+
     def add_voter(self, election_id, voter_id, vote):
         if election_id not in self.table or voter_id in self.table[election_id].registrar:
             return False
@@ -155,6 +160,11 @@ def end_election(req):
 def get_result(req):
     args = pickle.loads(req.data)
     return pickle.dumps(r.get_result(args['election_id']))
+
+@handler.register
+def get_election_votes(req):
+    args = pickle.loads(req.data)
+    return pickle.dumps(r.get_election_votes(args['election_id']))
 
 @handler.register
 def add_voter(req):

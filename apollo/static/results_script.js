@@ -1,7 +1,9 @@
 var full_names = {"clinton": "Hillary Clinton", "sanders": "Bernie Sanders", "trump": "Donald Trump"};
 var images;
+var election_votes;
 
-var initialize = function(clinton_img, sanders_img, trump_img) {
+var initialize = function(clinton_img, sanders_img, trump_img, election_results) {
+    election_votes = JSON.parse(election_results);
     images = {"clinton": clinton_img, "sanders": sanders_img, "trump": trump_img};
 };
 
@@ -93,4 +95,15 @@ var generateResults = function(results) {
             election_results.innerHTML += generateLoserHTML(items[i][0], i + 1, items[i][1], percent);
         }
     }
+}
+
+var checkElection = function() {
+    var myvote = document.cookie.split('=')[1];
+    for (var i = 0; i < election_votes.length; i++) {
+        var vote = election_votes[i];
+        if (vote === myvote) {
+            return true;
+        }
+    }
+    return false;
 }

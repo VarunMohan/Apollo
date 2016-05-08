@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 r_endpoint = entity_locations.get_registrar_endpoint()
 r = ClientRegistrar(r_endpoint)
-owner = 'kevinzhu'
+owner = 'vmohan'
 voter_ids = ['rsridhar', 'kevinzhu', 'vmohan', 'sunl', 'akshayr']
 candidates = ['clinton', 'sanders', 'trump']
 eid = r.register_election(voter_ids, candidates, owner)
@@ -55,6 +55,7 @@ def end_election():
 
     return message
 
+
 @app.route('/login')
 def login():
     # coming back from auth.php (we think)
@@ -77,11 +78,12 @@ def login():
 
 @app.route('/')
 def hello_world():
-    results = json.JSONEncoder().encode(e.decode_result(r.get_result(eid)))
 
     if 'username' in session:
         if not r.is_election_running(eid):
-            return render_template('demo_results.html', username = session['username'], results = results)
+            results = json.JSONEncoder().encode(e.decode_result(r.get_result(eid)))
+            election_votes = json.JSONEncoder().encode(list(map(str, r.get_election_votes(eid))))
+            return render_template('demo_results.html', username = session['username'], results = results, election_votes = election_votes)
         else:
             owner_flag = (session['username'] == owner)
             
