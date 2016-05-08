@@ -29,7 +29,7 @@ def submit_vote():
     try:
         t = ClientTallier(random.choice(tallier_endpoints))
         voter = Voter(session['username'], r, t, e)
-        success = voter.vote(request.form['candidate'])
+        success = voter.vote(request.form['evote'], json.loads(request.form['proof']))
         if not success:
             message = "Something went wrong, please try again"
 
@@ -84,7 +84,8 @@ def hello_world():
             return render_template('demo_results.html', username = session['username'], results = results)
         else:
             owner_flag = (session['username'] == owner)
-            return render_template('demo_interface.html', username = session['username'], owner = owner_flag)
+            
+            return render_template('demo_interface.html', username = session['username'], owner = owner_flag, num_candidates = len(candidates), num_voters = len(voter_ids), pkg = e.pk.g, pkn = e.pk.n)
     else:
         authURL = config['authURL']
         key = ''.join(random.choice(ascii_lowercase) for i in range(10))

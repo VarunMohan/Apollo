@@ -13,28 +13,9 @@ class Voter:
         self.r = None
         self.proof = None
 
-    def encrypt_vote(self, candidate):
-        m = self.election.n_voters + 1
-        candidate_id = self.election.candidates.index(candidate)
-        # add one because of overflow case
-        vote = pow((m), candidate_id)
-        (self.evote, self.r) = paillier.encrypt(self.election.pk, vote)
-
-        esum = pycrypto.getRandomInteger(1024) # in the future, the tallier sends this number
-
-        u = []
-
-        n = self.election.pk.n
-
-        for i in range(self.election.n_candidates):
-            newu = (self.evote * pycrypto.inverse(pow(self.election.pk.g, pow(m, i), n * n), n * n)) % (n * n)
-            u.append(newu)
-
-        self.proof = znp.gen_proof(self.election.pk, u, esum, candidate_id, self.r)
-        return
-
-    def vote(self, candidate):
-        self.encrypt_vote(candidate)
+    def vote(self, evote, proof):
+        self.evote = int(evote)
+        self.proof = [list(map(int, proof[0])), list(map(int, proof[1])), list(map(int, proof[2])), list(map(int, proof[3])), int(proof[4])]
         if self.registrar.add_voter(self.election.election_id, self.voter_id, self.evote):
             if self.tallier.send_vote(self.voter_id, self.election.election_id, self.evote, self.proof):
                 return True
