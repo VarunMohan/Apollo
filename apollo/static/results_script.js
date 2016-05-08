@@ -19,7 +19,14 @@ var generateWinnerHTML = function(winner, votes, percent) {
     return '<div class="card card-winner">' + 
                '<img class="card-img-left img-winner" src="' + images[winner] + '" alt="' + full_names[winner] + '">' + 
                '<div class="card-inline-block">' + 
-                   '<h3 class="card-title title card-title-winner">' + full_names[winner] + '</h3>' + 
+                   '<h3 class="card-title title card-title-winner">' + 
+                       '<div class="full-title-winner">' + 
+                           full_names[winner] + 
+                       '</div>' + 
+                       '<div class="check-winner">' + 
+                           '<i class="fa fa-check" aria-hidden="true"></i>' + 
+                       '</div>' + 
+                   '</h3>' + 
                    '<p class="card-text">' + descriptions[winner] + '</p>' + 
                    '<progress class="progress" value="' + percent + '" max="100">' + percent + '%</progress>' + 
                    '<h3 class="stats">' + 
@@ -79,7 +86,7 @@ var generateResults = function(results) {
             percent = 0;
         }
         else {
-            percent = items[i][1] / total * 100;
+            percent = Math.round(items[i][1] / total * 100 * 10) / 10;
         }
         if(items[i][1] === winning_vote_num) {
             election_results.innerHTML += generateWinnerHTML(items[i][0], items[i][1], percent);
