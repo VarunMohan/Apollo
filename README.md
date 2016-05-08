@@ -52,12 +52,3 @@ Finally, `offline-runthrough.py` will create an election and execute votes, requ
 
 ## Debugging
 * Add `sys.stdout.flush()` to see the output of stdout in logs
-
-## TODO
-* Optimize crypto (sunl)
-* Error Handling (sunl)
-* Malicious tests (sunl)
-* ZNP for end-to-end integrity check (sunl)
-* Client-side encryption of vote (kevinzhu)
-* Unexposed API (vmohan, sunl)
-* Written Report (kevinzhu)
