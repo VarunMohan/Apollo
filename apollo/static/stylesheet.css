@@ -39,7 +39,7 @@ body {
     top: 200px;
 }
 
-.row {
+.card-deck-wrapper {
     padding-bottom: 2rem;
 }
 
@@ -108,7 +108,7 @@ button, a, p {
 
 .card-img-top {
     width: 100%;
-    height: 253px;
+    height: 353px;
     object-fit: cover;
 }
 
