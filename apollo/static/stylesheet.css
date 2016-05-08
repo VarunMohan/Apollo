@@ -1,5 +1,11 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
     padding-top: 54px;
+    margin-bottom: 150px;
 }
 
 .navbar-nav p {
@@ -111,6 +117,9 @@ footer {
     padding-bottom: 3rem;
     margin-top: 1rem;
     background-color: #f7f7f7;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 footer p {
