@@ -62,7 +62,7 @@ def decrypt_proof(pk, sk, cipher, chall):
     
     z = rand * pow(r, chall, n * n)
     
-    return (msg, cipher, an, chall, z)
+    return (an, z)
 
 # given a proof, checks decryption was done properly
 def check_decrypt(pk, msg, cipher, an, chall, z):

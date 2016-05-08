@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 r_endpoint = entity_locations.get_registrar_endpoint()
 r = ClientRegistrar(r_endpoint)
-owner = 'kevinzhu'
+owner = 'vmohan'
 voter_ids = ['rsridhar', 'kevinzhu', 'vmohan', 'sunl', 'akshayr']
 candidates = ['clinton', 'sanders', 'trump']
 eid = r.register_election(voter_ids, candidates, owner)
