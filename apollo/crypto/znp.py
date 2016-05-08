@@ -51,23 +51,23 @@ def check_proof(pk, u, a, e, z, esum):
     return True
 
 # generates a ZNP that decryption was done properly, given a random number chal by voter
-def decrypt_proof(pk, sk, cipher, chal):
+def decrypt_proof(pk, sk, cipher, chall):
     n = pk.n
     msg = paillier.decrypt(pk, sk, cipher)
     rn = (cipher * pycrypto.inverse(pow(pk.g, msg, n * n), n * n)) % (n * n)
     r = pow(rn, pycrypto.inverse(n, sk.l), n * n) # generates bogus if r^n not nth power
     
-    rand = pycrypto.getRandomInteger(PRIME_SIZE * 2)
-    randn = pow(rand, n, n * n)
+    a = pycrypto.getRandomInteger(PRIME_SIZE * 2)
+    an = pow(rand, n, n * n)
     
-    z = rand * pow(r, chal, n * n)
+    z = rand * pow(r, chall, n * n)
     
-    return (msg, cipher, randn, chall, z)
+    return (msg, cipher, an, chall, z)
 
 # given a proof, checks decryption was done properly
-def check_decrypt(pk, msg, cipher, rand, chall, z):
+def check_decrypt(pk, msg, cipher, an, chall, z):
     n = pk.n
-    if pow(z, n, n * n) == (rand * pow((cipher * pycrypto.inverse(pow(pk.g, msg, n * n), n * n)), chall, n * n)) % (n * n):
+    if pow(z, n, n * n) == (an * pow((cipher * pycrypto.inverse(pow(pk.g, msg, n * n), n * n)), chall, n * n)) % (n * n):
         return True
 
     return False
