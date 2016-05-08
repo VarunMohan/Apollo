@@ -106,6 +106,8 @@ var endElection = function() {
 }
 
 var end_election_button = document.getElementById("end-election");
-end_election_button.addEventListener("click", function() {
-    endElection();
-});
+if(end_election_button) {
+    end_election_button.addEventListener("click", function() {
+        endElection();
+    });
+}
