@@ -4,7 +4,7 @@ var checked = null;
 
 var submitted = false;
 
-var candidate_ids = {"clinton": 0, "cruz": 1, "kasich": 2, "sanders": 3, "trump": 4};
+var candidate_ids = {"clinton": 0, "sanders": 1, "trump": 2};
 
 var num_candidates;
 var num_voters;
