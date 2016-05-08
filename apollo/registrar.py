@@ -198,5 +198,5 @@ class TableEntry:
         self.done = False
 
 if __name__ == '__main__':
-    app.run(host=endpoint.hostname, port=endpoint.port, debug=True)
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
 
