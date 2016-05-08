@@ -112,6 +112,10 @@ button, a, p {
     object-fit: cover;
 }
 
+.card-text-winner {
+    font-size: 16px;
+}
+
 .card-text {
     font-size: 14px;
 }

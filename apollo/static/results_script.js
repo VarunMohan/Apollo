@@ -27,7 +27,7 @@ var generateWinnerHTML = function(winner, votes, percent) {
                            '<i class="fa fa-check" aria-hidden="true"></i>' + 
                        '</div>' + 
                    '</h3>' + 
-                   '<p class="card-text">' + descriptions[winner] + '</p>' + 
+                   '<p class="card-text-winner">' + descriptions[winner] + '</p>' + 
                    '<progress class="progress" value="' + percent + '" max="100">' + percent + '%</progress>' + 
                    '<h3 class="stats">' + 
                        '<div class="votes">' + 
