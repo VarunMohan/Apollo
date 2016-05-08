@@ -79,7 +79,7 @@ var sendVote = function(evote, proof) {
 };
 
 submit_button.addEventListener("click", function() {
-    submit_button.innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Submitting...';
+    submit_button.innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Encrypting...';
     submit_button.disabled = true;
     submitted = true;
     var worker = new Worker("/static/encrypt.js");

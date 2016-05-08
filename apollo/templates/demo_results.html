@@ -26,6 +26,7 @@
             <div class="container">
                 <h1 class="display-3 title">Election 2016</h1>
                 <p class="lead">The race for the White House</p>
+                <button id="verify-election" type="button" class="btn btn-lg btn-info">Verify Election</button>
             </div>
         </div>
         <div id="election-results" class="container">
@@ -40,7 +41,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
         <script src="{{ url_for('static', filename='results_script.js') }}"></script>
         <script type="text/javascript">
-initialize("{{ url_for('static', filename='img/clinton.jpg') }}", "{{ url_for('static', filename='img/sanders.jpg') }}", "{{ url_for('static', filename='img/trump.jpg') }}", '{{ election_votes|safe }}');
+            initialize("{{ url_for('static', filename='img/clinton.jpg') }}", "{{ url_for('static', filename='img/sanders.jpg') }}", "{{ url_for('static', filename='img/trump.jpg') }}", '{{ election_votes|safe }}');
             window.onload = generateResults({{ results|safe }});
         </script>
     </body>

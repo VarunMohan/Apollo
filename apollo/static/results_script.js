@@ -97,13 +97,25 @@ var generateResults = function(results) {
     }
 }
 
-var checkElection = function() {
+var verify_election_button = document.getElementById("verify-election");
+
+var verifyElection = function() {
     var myvote = document.cookie.split('=')[1];
     for (var i = 0; i < election_votes.length; i++) {
         var vote = election_votes[i];
         if (vote === myvote) {
-            return true;
+            verify_election_button.innerHTML = "Valid Election";
+            verify_election_button.disabled = true;
+            verify_election_button.classList.remove("btn-info");
+            verify_election_button.classList.add("btn-success");
         }
     }
-    return false;
+    verify_election_button.innerHTML = "Invalid Election";
+    verify_election_button.disabled = true;
+    verify_election_button.classList.remove("btn-info");
+    verify_election_button.classList.add("btn-danger");
 }
+
+verify_election_button.addEventListener("click", function() {
+    verifyElection();
+});
