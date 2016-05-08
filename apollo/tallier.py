@@ -82,5 +82,5 @@ if __name__ == '__main__':
     endpoint = entity_locations.get_tallier_endpoints()[tallier_id]
     registrar_endpoint = entity_locations.get_registrar_endpoint()
     t = Tallier(tallier_id, endpoint, registrar_endpoint, num_elections)
-    app.run(host=endpoint.hostname, port=endpoint.port, debug=True)
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
 

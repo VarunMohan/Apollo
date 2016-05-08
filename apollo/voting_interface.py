@@ -64,5 +64,5 @@ def hello_world():
 
 if __name__ == '__main__':
     endpoint = entity_locations.get_voting_interface_endpoint()
-    app.run(host=endpoint.hostname, port=endpoint.port, debug=True)
+    app.run(host=endpoint.hostname, port=endpoint.port, debug=False)
 
