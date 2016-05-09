@@ -106,6 +106,10 @@ def hello_world():
         session['key'] = key
         return redirect(linkURL)
 
+@app.route('/about')
+def about():
+    return render_template('demo_about.html')
+
 if __name__ == '__main__':
     with open('config.json') as f:
         config = json.load(f)
