@@ -58,9 +58,9 @@ def decrypt_proof(pk, sk, cipher, chall):
     r = pow(rn, pycrypto.inverse(n, sk.l), n * n) # generates bogus if r^n not nth power
     
     a = pycrypto.getRandomInteger(PRIME_SIZE * 2)
-    an = pow(rand, n, n * n)
+    an = pow(a, n, n * n)
     
-    z = rand * pow(r, chall, n * n)
+    z = a * pow(r, chall, n * n)
     
     return (an, z)
 
