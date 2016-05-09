@@ -108,7 +108,7 @@ var verify_election_button = document.getElementById("verify-election");
 var verifyElection = function() {
     var myvote = document.cookie.split('=')[1];
     var good = false;
-    for (var i = 0; i < election_votes.length; i++) {
+    for(var i = 0; i < election_votes.length; i++) {
         var vote = election_votes[i];
         if (vote === myvote) {
             good = true;
@@ -125,7 +125,8 @@ var verifyElection = function() {
                 verify_election_button.classList.add("btn-success");
             }
         }
-    } else {
+    }
+    else {
         verify_election_button.innerHTML = "Invalid Election";
         verify_election_button.classList.remove("btn-info");
         verify_election_button.classList.add("btn-danger");
@@ -137,3 +138,7 @@ verify_election_button.addEventListener("click", function() {
     verify_election_button.disabled = true;
     verifyElection();
 });
+
+if(document.cookie === "") {
+    verify_election_button.style.display = "none";
+}
