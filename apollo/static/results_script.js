@@ -121,19 +121,19 @@ var verifyElection = function() {
             worker.terminate();
             if (e.data[0]) {
                 verify_election_button.innerHTML = "Valid Election";
-                verify_election_button.disabled = true;
                 verify_election_button.classList.remove("btn-info");
                 verify_election_button.classList.add("btn-success");
             }
         }
     } else {
         verify_election_button.innerHTML = "Invalid Election";
-        verify_election_button.disabled = true;
         verify_election_button.classList.remove("btn-info");
         verify_election_button.classList.add("btn-danger");
     }
 }
 
 verify_election_button.addEventListener("click", function() {
+    verify_election_button.innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Verifying...';
+    verify_election_button.disabled = true;
     verifyElection();
 });
