@@ -43,6 +43,11 @@ class ClientRegistrar:
         resp = self.r.get_result(pickle.dumps(args))
         return pickle.loads(resp.data)
 
+    def verify_election(self, election_id, e_chall):
+        args = {'election_id': election_id, 'e_chall': e_chall}
+        resp = self.r.verify_election(pickle.dumps(args))
+        return pickle.loads(resp.data)
+
     def get_election_votes(self, election_id):
         args = {'election_id': election_id}
         resp = self.r.get_election_votes(pickle.dumps(args))

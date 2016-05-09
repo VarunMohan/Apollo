@@ -7,6 +7,7 @@ import json
 
 import random
 import json
+import sys
 from hashlib import sha256
 from string import ascii_lowercase
 from flask import Flask, render_template, request, session, redirect
@@ -37,6 +38,14 @@ def submit_vote():
         message = 'Something went wrong, please try again'
 
     return message
+
+@app.route('/api/verify_election', methods=['POST'])
+def verify_election():
+    an, z =  r.verify_election(eid, int(request.form['e_chall']))
+    arr = [str(an), str(z)]
+    print("RETURN: ", arr)
+    sys.stdout.flush()
+    return json.JSONEncoder().encode(arr)
 
 @app.route('/api/end_election', methods=['POST'])
 def end_election():
@@ -76,14 +85,16 @@ def login():
 
     return '<script>window.location.href = "../"</script>'
 
+
 @app.route('/')
 def hello_world():
 
     if 'username' in session:
         if not r.is_election_running(eid):
             results = json.JSONEncoder().encode(e.decode_result(r.get_result(eid)))
+            result_msg = r.get_result(eid)
             election_votes = json.JSONEncoder().encode(list(map(str, r.get_election_votes(eid))))
-            return render_template('demo_results.html', username = session['username'], results = results, election_votes = election_votes)
+            return render_template('demo_results.html', username = session['username'], results = results, election_votes = election_votes, result_msg = result_msg, pkg = e.pk.g, pkn = e.pk.n)
         else:
             owner_flag = (session['username'] == owner)
             

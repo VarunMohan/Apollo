@@ -1,9 +1,15 @@
 var full_names = {"clinton": "Hillary Clinton", "sanders": "Bernie Sanders", "trump": "Donald Trump"};
 var images;
 var election_votes;
+var msg;
+var pkn;
+var pkg;
 
-var initialize = function(clinton_img, sanders_img, trump_img, election_results) {
+var initialize = function(clinton_img, sanders_img, trump_img, election_results, server_msg, server_pkg, server_pkn) {
     election_votes = JSON.parse(election_results);
+    msg = server_msg;
+    pkg = server_pkg;
+    pkn = server_pkn;
     images = {"clinton": clinton_img, "sanders": sanders_img, "trump": trump_img};
 };
 
@@ -108,16 +114,23 @@ var verifyElection = function() {
             good = true;
         }
     }
-    if (!good) {
+    if(good) {
+        var worker = new Worker("/static/verify.js");
+        worker.postMessage([election_votes, msg, pkg, pkn]);
+        worker.onmessage = function(e) {
+            worker.terminate();
+            if (e.data[0]) {
+                verify_election_button.innerHTML = "Valid Election";
+                verify_election_button.disabled = true;
+                verify_election_button.classList.remove("btn-info");
+                verify_election_button.classList.add("btn-success");
+            }
+        }
+    } else {
         verify_election_button.innerHTML = "Invalid Election";
         verify_election_button.disabled = true;
         verify_election_button.classList.remove("btn-info");
         verify_election_button.classList.add("btn-danger");
-    } else {
-        verify_election_button.innerHTML = "Valid Election";
-        verify_election_button.disabled = true;
-        verify_election_button.classList.remove("btn-info");
-        verify_election_button.classList.add("btn-success");
     }
 }
 

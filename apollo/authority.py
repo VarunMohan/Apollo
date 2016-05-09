@@ -1,4 +1,4 @@
-from crypto import paillier
+from crypto import paillier, znp
 from client_tallier import ClientTallier
 from client_aggregate_tallier import ClientAggregateTallier
 import entity_locations
@@ -41,7 +41,10 @@ class Authority:
         pk, sk  = self.keys[election_id - 1]
         if self.results[election_id - 1] == None:
             return False
-        return decrypt_proof(pk, sk, self.ciphers[election_id - 1], e_chall) 
+        print(pk, sk, self.ciphers[election_id - 1], e_chall)
+        sys.stdout.flush()
+        return znp.decrypt_proof(pk, sk, self.ciphers[election_id - 1], e_chall) 
+
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
@@ -54,9 +57,15 @@ def create_election():
 
 @handler.register
 def compute_result(req):
-    #this is soley for the sake of 'offline_runthrough.py'
     args = pickle.loads(req.data)
     return pickle.dumps(a.compute_result(args['election_id']))
+
+@handler.register
+def verify_election(req):
+    args = pickle.loads(req.data)
+    print(args)
+    sys.stdout.flush()
+    return pickle.dumps(a.verify_election(args['election_id'], args['e_chall']))
 
 if __name__ == '__main__':
     app.run(host=endpoint.hostname, port=endpoint.port, debug=False)

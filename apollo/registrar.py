@@ -119,6 +119,10 @@ class Registrar:
         record.has_voted = True
         return True
 
+    def verify_election(self, election_id, e_chall):
+        a = ClientAuthority()
+        return a.verify_election(election_id, e_chall)
+
 app = Flask(__name__)
 handler = XMLRPCHandler('api')
 handler.connect(app, '/api')
@@ -160,6 +164,13 @@ def end_election(req):
 def get_result(req):
     args = pickle.loads(req.data)
     return pickle.dumps(r.get_result(args['election_id']))
+
+@handler.register
+def verify_election(req):
+    args = pickle.loads(req.data)
+    print(args)
+    sys.stdout.flush()
+    return pickle.dumps(r.verify_election(args['election_id'], args['e_chall']))
 
 @handler.register
 def get_election_votes(req):
