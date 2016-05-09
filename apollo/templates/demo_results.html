@@ -17,7 +17,7 @@
                 <div class="nav navbar-nav">
                     <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
                     <a class="nav-item nav-link" href="/about">About</a>
-                    <p class="nav-item pull-xs-right">{{ username }}@mit.edu</p>
+                    <p class="nav-item pull-xs-right">{{ username }}</p>
                 </div>
             </div>
         </nav>
@@ -42,7 +42,7 @@
         <script src="{{ url_for('static', filename='results_script.js') }}"></script>
         <script src="{{ url_for('static', filename='verify.js') }}"></script>
         <script type="text/javascript">
-initialize("{{ url_for('static', filename='img/clinton.jpg') }}", "{{ url_for('static', filename='img/sanders.jpg') }}", "{{ url_for('static', filename='img/trump.jpg') }}", '{{ election_votes|safe }}', '{{ result_msg }}', '{{ pkg }}', '{{ pkn }}');
+            initialize("{{ url_for('static', filename='img/clinton.jpg') }}", "{{ url_for('static', filename='img/sanders.jpg') }}", "{{ url_for('static', filename='img/trump.jpg') }}", '{{ election_votes|safe }}', '{{ result_msg }}', '{{ pkg }}', '{{ pkn }}');
             window.onload = generateResults({{ results|safe }});
         </script>
     </body>

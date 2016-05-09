@@ -39,12 +39,34 @@ body {
     top: 200px;
 }
 
+.card-deck {
+    all: unset;
+}
+
+.card-deck .card {
+    display: block;
+    width: unset;
+    vertical-align: unset;
+}
+
 .card-deck-wrapper {
     padding-bottom: 2rem;
+    margin-right: unset;
+    margin-left: unset;
 }
 
 .title {
     font-family: "Lora", serif;
+}
+
+.display-3 {
+    font-size: 3rem;
+}
+
+@media (min-width: 48em) {
+    .display-3 {
+        font-size: 4.5rem;
+    }
 }
 
 button, a, p {
@@ -108,7 +130,7 @@ button, a, p {
 
 .card-img-top {
     width: 100%;
-    height: 353px;
+    height: 368px;
     object-fit: cover;
 }
 
@@ -137,24 +159,51 @@ footer p {
     color: #818a91;
 }
 
+@media (min-width: 62em) {
+    .card-deck {
+        display: table;
+        table-layout: fixed;
+        border-spacing: 1.25rem 0;
+    }
+    
+    .card-deck .card {
+        display: table-cell;
+        width: 1%;
+        vertical-align: top;
+    }
+    
+    .card-deck-wrapper {
+        margin-right: -1.25rem;
+        margin-left: -1.25rem;
+    }
+    
+    .card-img-top {
+        height: 286px;
+    }
+}
+
+@media (min-width: 75em) {
+    .card-img-top {
+        height: 353px;
+    }
+}
+
 #election-results {
     padding-bottom: 2rem;
 }
 
 .card-img-left {
-    display: inline-block;
-    border-radius: 0.25rem 0 0 0.25rem;
+    border-radius: 0.25rem 0.25rem 0 0;
     object-fit: cover;
 }
 
 .card-winner {
-    display: flex;
+    
 }
 
 .img-winner {
-    width: 328px;
-    height: 328px;
-    flex: none;
+    width: 100%;
+    height: 368px;
 }
 
 .card-inline-block {
@@ -162,7 +211,7 @@ footer p {
 }
 
 .card-title-winner {
-    font-size: 56px;
+    font-size: 36px;
 }
 
 .full-title-winner {
@@ -175,17 +224,16 @@ footer p {
     margin-left: 1rem;
     display: inline-block;
     vertical-align: middle;
-    font-size: 48px;
+    font-size: 32px;
 }
 
 .card-loser {
-    display: flex;
+    
 }
 
 .img-loser {
-    width: 253px;
-    height: 253px;
-    flex: none;
+    width: 100%;
+    height: 293px;
 }
 
 .labeled-card {
@@ -201,7 +249,7 @@ footer p {
     font-size: 36px;
     font-family: "Lora", serif;
     vertical-align: middle;
-    line-height: 253px;
+    line-height: 293px;
     text-align: center;
 }
 
@@ -220,13 +268,48 @@ footer p {
     padding-left: 0.8rem;
 }
 
+@media (min-width: 62em) {
+    .card-img-left {
+        display: inline-block;
+        border-radius: 0.25rem 0 0 0.25rem;
+    }
+    
+    .card-winner {
+        display: flex;
+    }
+    
+    .img-winner {
+        width: 361px;
+        height: 361px;
+        flex: none;
+    }
+    
+    .card-title-winner {
+        font-size: 56px;
+    }
+    
+    .check-winner {
+        font-size: 48px;
+    }
+    
+    .card-loser {
+        display: flex;
+    }
+    
+    .img-loser {
+        width: 286px;
+        height: 286px;
+        flex: none;
+    }
+    
+    .number {
+        line-height: 286px;
+    }
+}
+
 .about {
-    display: inline-block;
-    vertical-align: middle;
-    width: 50%;
     text-align: center;
-    padding-left: 2rem;
-    padding-right: 1.5rem;
+    margin-top: 1rem;
 }
 
 .about-title {
@@ -244,13 +327,31 @@ footer p {
 }
 
 .apollo {
-    display: inline-block;
-    vertical-align: middle;
-    width: 50%;
-    padding: 2rem 2rem 2rem 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
 }
 
 .apollo img {
     width: 100%;
     height: auto;
+}
+
+@media (min-width: 62em) {
+    .about {
+        margin-top: 0rem;
+        display: inline-block;
+        vertical-align: middle;
+        width: 50%;
+        padding-left: 2rem;
+        padding-right: 1.5rem;
+    }
+    
+    .apollo {
+        margin-top: 0rem;
+        margin-bottom: 0rem;
+        display: inline-block;
+        vertical-align: middle;
+        width: 50%;
+        padding: 2rem 6rem 2rem 1.5rem;
+    }
 }
